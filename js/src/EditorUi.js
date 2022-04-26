@@ -3,7 +3,7 @@ var Menus = require('./Menus');
 var Actions = require('./Actions');
 var Toolbar = require('./Toolbar');
 var Format = require('./Format');
-
+//Sidebar.prototype.itemClicked
 /**
  * Copyright (c) 2006-2012, JGraph Ltd
  */
@@ -11,10 +11,12 @@ var Format = require('./Format');
  * Constructs a new graph editor
  */
 const EditorUi = function (editor, container, lightbox) {
+  //console.log('editorUI...');
   mxEventSource.call(this);
   this.destroyFunctions = [];
 
   this.editor = editor || new Editor();
+  EditorUi.prototype.editor = this.editor;
   this.container = container || document.body;
   var graph = this.editor.graph;
   graph.lightbox = lightbox;
@@ -727,10 +729,16 @@ const EditorUi = function (editor, container, lightbox) {
    	this.editor.resetGraph();
    	this.init();
    	this.open();
+     
 };
 
 // Extends mxEventSource
 mxUtils.extend(EditorUi, mxEventSource);
+
+EditorUi.prototype.sidebar = Sidebar;
+
+
+
 
 /**
  * Global config that specifies if the compact UI elements should be used.
@@ -792,6 +800,7 @@ EditorUi.prototype.allowAnimation = true;
  * Installs the listeners to update the action states.
  */
 EditorUi.prototype.init = function () {
+  //console.log('editorUI prototype init...');
   /**
 	 * Keypress starts immediate editing on selection cell
 	 */
@@ -1491,6 +1500,7 @@ EditorUi.prototype.initCanvas = function () {
           return;
         }
 
+        // TODO: todo-1 posible interaccion para emitir cambios en el mapa.
         graphSizeDidChange.apply(this, arguments);
       }
     };

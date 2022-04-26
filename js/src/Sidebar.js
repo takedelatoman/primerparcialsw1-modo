@@ -1054,6 +1054,8 @@ Sidebar.prototype.createDragPreview = function (width, height) {
  * Creates a drag source for the given element.
  */
 Sidebar.prototype.dropAndConnect = function (source, targets, direction, dropCellIndex) {
+  // TODO: DROP AND CONNECT.
+  console.log('dropAndConnect...');
   var geo = this.getDropAndConnectGeometry(source, targets[dropCellIndex], direction, targets);
 
   if (geo != null) {
@@ -1876,12 +1878,12 @@ Sidebar.prototype.createDragSource = function (elt, dropHandler, preview, cells,
  * Adds a handler for inserting the cell with a single click.
  */
 Sidebar.prototype.itemClicked = function (cells, ds, evt, elt) {
-  console.log('itemClicked...');
+  //console.log('itemClicked...');
   var graph = this.editorUi.editor.graph;
 
   // Alt+Click inserts and connects
   if (mxEvent.isAltDown(evt)) {
-    console.log('isAltDown...');
+    //console.log('isAltDown...');
     if (graph.getSelectionCount() == 1 && graph.model.isVertex(graph.getSelectionCell())) {
       var firstVertex = null;
 
@@ -1930,6 +1932,8 @@ Sidebar.prototype.addClickHandler = function (elt, ds, cells) {
   });
 
   ds.mouseUp = mxUtils.bind(this, function (evt) {
+    // TODO: cuando mantiene click el componente de la paleta de componentes
+    //console.log('mouseUp...');
     if (!mxEvent.isPopupTrigger(evt) && this.currentGraph == null && first != null) {
       
       var tol = graph.tolerance;

@@ -39,7 +39,10 @@ Editor = function(chromeless, themes, model, graph)
 	// Updates modified state if graph changes
 	this.graphChangeListener = function(sender, eventObject) 
 	{
-		console.log('graphChangeListener...');
+		//console.log('graphChangeListener...');
+		//console.log(sender);
+		//console.log(eventObject);
+		//console.log('======================');
 		var edit = (eventObject != null) ? eventObject.getProperty('edit') : null;
 				
 		if (edit == null || !edit.ignoreEdit)
@@ -56,6 +59,7 @@ Editor = function(chromeless, themes, model, graph)
 	// Sets persistent graph state defaults
 	this.graph.resetViewOnRootChange = false;
 	this.init();
+	
 };
 
 /**
