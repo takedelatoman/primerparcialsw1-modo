@@ -3,7 +3,7 @@ var Menus = require('./Menus');
 var Actions = require('./Actions');
 var Toolbar = require('./Toolbar');
 var Format = require('./Format');
-//Sidebar.prototype.itemClicked
+
 /**
  * Copyright (c) 2006-2012, JGraph Ltd
  */
@@ -2344,6 +2344,7 @@ EditorUi.prototype.createSidebarFooterContainer = function () {
  */
 EditorUi.prototype.createUi = function () {
   // Creates menubar
+  //
   this.menubar = (this.editor.chromeless) ? null : this.menus.createMenubar(this.createDiv('geMenubar'));
 
   if (this.menubar != null) {
@@ -2374,6 +2375,7 @@ EditorUi.prototype.createUi = function () {
   }
 
   // Creates the format sidebar
+  //
   this.format = (this.editor.chromeless || !this.formatEnabled) ? null : this.createFormat(this.formatContainer);
 
   if (this.format != null) {
@@ -2399,6 +2401,7 @@ EditorUi.prototype.createUi = function () {
   }
 
   // Creates toolbar
+  //
   this.toolbar = (this.editor.chromeless) ? null : this.createToolbar(this.createDiv('geToolbar'));
 
   if (this.toolbar != null) {

@@ -12,13 +12,13 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
  * In development mode, we connect our own websocket server
  */
 if (!isProd) {
-  require('../js/core/watch.js');
+  require('../js/core/io.js');
 }
 
 module.exports = {
   entry: './js/index.js',
   output: {
-    publicPath: '/',
+    publicPath: '/model-c4',
     filename: '[hash].bundle.js',
   },
   plugins: [

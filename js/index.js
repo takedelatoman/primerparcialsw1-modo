@@ -1,9 +1,17 @@
 
 window.addEventListener('load', () => {
-  const io = require('socket.io-client');
-  const socket = io.connect('http://localhost:9090');
+
+  const {io, socket } = require('./core/watch.js');
   const EditorUi = require('./src/EditorUi.js');
-  const path = require('path');
+  const params = (new URL(window.location)).searchParams;
+  const room = params.get('room');
+  const username = params.get('username'); 
+
+  if(room && username) {
+    socket.emit('login', { name: username, room  });
+  }
+  
+
 
 // Extends EditorUi to update I/O action states based on availability of backend
 
@@ -28,18 +36,20 @@ EditorUi.prototype.init = function () {
     }));
   }
 
+
+  console.log(EditorUi.prototype.editor.graph);
+
   // Extends graphChangeListener to emit socket server
   
   var graphChangeListener = EditorUi.prototype.editor.graphChangeListener;
   EditorUi.prototype.editor.graphChangeListener = function(sender, eventObject) {
     graphChangeListener.apply(this, arguments);
-    console.log('graphChangeListener extened event captured!!!!....')
-     console.log(event);
+     //console.log(event);
     if((event && event.pointerType) || (event && event.key == 'Delete')){
       //console.log('is a pointer type...');
       const snapshotDiagramXml = EditorUi.prototype.editor.getGraphXml();
       const xmlString = (new XMLSerializer()).serializeToString(snapshotDiagramXml);
-      socket.emit('draw_component', { xml: xmlString  });
+      socket.emit('draw_component', { room, xml: xmlString });
     }
 
   }
@@ -55,7 +65,7 @@ EditorUi.prototype.sidebar.prototype.itemClicked = function(cells, ds, evt, elt)
   //console.log('extends from itemClicked...');
   const snapshotDiagramXml = this.editorUi.editor.getGraphXml();
   const xmlString = (new XMLSerializer()).serializeToString(snapshotDiagramXml);
-  socket.emit('draw_component', { xml: xmlString  });
+  socket.emit('draw_component', { room, xml: xmlString  });
   
 }
 
@@ -93,7 +103,7 @@ socket.on('connect', () => {
   });
 
    socket.on('draw_component', (data) => {
-    console.log('Listen to socketClient.drawComponent');
+    //console.log('Listen to socketClient.drawComponent');
      const { xml: xmlString } = data;
      //console.log('xmlstring es ',xmlString);
      if(xmlString !== ''){    
