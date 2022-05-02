@@ -17,6 +17,7 @@ const EditorUi = function (editor, container, lightbox) {
 
   this.editor = editor || new Editor();
   EditorUi.prototype.editor = this.editor;
+  
   this.container = container || document.body;
   var graph = this.editor.graph;
   graph.lightbox = lightbox;
@@ -44,8 +45,9 @@ const EditorUi = function (editor, container, lightbox) {
     };
   }
 
-  // Creates the user interface
-  this.actions = new Actions(this);
+   // Creates the user interface
+   this.actions = new Actions(this); 
+   EditorUi.prototype.actions = this.actions;
   this.menus = this.createMenus();
   this.createDivs();
   this.createUi();
@@ -2290,12 +2292,16 @@ EditorUi.prototype.createTabContainer = function () {
  * Creates the required containers.
  */
 EditorUi.prototype.createDivs = function () {
+  //
   this.menubarContainer = this.createDiv('geMenubarContainer');
   this.toolbarContainer = this.createDiv('geToolbarContainer');
   this.sidebarContainer = this.createDiv('geSidebarContainer');
   this.formatContainer = this.createDiv('geSidebarContainer');
   this.diagramContainer = this.createDiv('geDiagramContainer');
   this.footerContainer = this.createDiv('geFooterContainer');
+  EditorUi.prototype.menubarContainer = this.menubarContainer;
+  EditorUi.prototype.footerContainer = this.footerContainer;
+  EditorUi.prototype.sidebarContainer = this.sidebarContainer;
   this.hsplit = this.createDiv('geHsplit');
   this.hsplit.setAttribute('title', mxResources.get('collapseExpand'));
 
