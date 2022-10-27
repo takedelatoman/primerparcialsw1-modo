@@ -235,7 +235,7 @@ const EditorUi = function (editor, container, lightbox) {
 
             while (node != null && node.nodeType != mxConstants.NODETYPE_ELEMENT) {
               node = node.parentNode;
-            }
+            } 
 
             if (node != null) {
               var css = mxUtils.getCurrentStyle(node);
