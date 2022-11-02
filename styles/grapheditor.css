@@ -1,6 +1,7 @@
 .geEditor {
 	font-family:Helvetica Neue,Helvetica,Arial Unicode MS,Arial;
-	font-size:14pt;
+	font-size:15pt;
+	font-weight: 700;
 	border:none;
 	margin:0px;
 	color: #2f5bb7;
@@ -24,7 +25,7 @@
 	color:#000000;
 	text-decoration:none;
 }
-.geMenubarContainer, .geToolbarContainer, .geDiagramContainer, .geSidebarContainer, .geFooterContainer, .geHsplit, .geVsplit {
+.geToolbarContainer, .geDiagramContainer, .geSidebarContainer, .geFooterContainer, .geHsplit, .geVsplit {
 	overflow:hidden;
 	position:absolute;
 	cursor:default;
@@ -37,6 +38,7 @@
 	white-space:nowrap;
 	display:block;
 	width:100%;
+
 }
 .geMenubarContainer .geItem, .geToolbar .geButton, .geToolbar .geLabel, .geSidebar, .geSidebarContainer .geTitle, .geSidebar .geItem, .mxPopupMenuItem {
 	-webkit-transition: all 0.1s ease-in-out;
@@ -198,13 +200,15 @@
 }
 .geMenubarContainer {
 	background-color:#91cdf8;
+	
 }
 .geMenubar {
 	padding:0px 2px 0px 2px;
 	vertical-align:middle;
 }
 .geMenubarContainer .geItem, .geToolbar .geItem {
-	padding:6px 8px 6px 8px;
+	padding :15px 15px 15px 15px; 
+	align-items: center;
 	cursor:default;
 }
 .geMenubarContainer .geItem:hover {
@@ -226,7 +230,8 @@
 	border:1px solid #d5d5d5 !important;
 }
 .geToolbarContainer {
-	background:whiteSmoke;
+	
+	background: whiteSmoke;
 	border-bottom:1px solid #e0e0e0;
 }
 .geSidebarContainer .geToolbarContainer {
