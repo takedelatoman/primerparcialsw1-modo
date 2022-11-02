@@ -1,8 +1,10 @@
 .geEditor {
 	font-family:Helvetica Neue,Helvetica,Arial Unicode MS,Arial;
-	font-size:10pt;
+	font-size:14pt;
 	border:none;
 	margin:0px;
+	color: #2f5bb7;
+	background-color: #843534;
 }
 .geEditor input[type=text]::-ms-clear {
 	display: none;
@@ -195,7 +197,7 @@
 	text-decoration:none;
 }
 .geMenubarContainer {
-	background-color:#ffffff;
+	background-color:#91cdf8;
 }
 .geMenubar {
 	padding:0px 2px 0px 2px;
@@ -206,7 +208,7 @@
 	cursor:default;
 }
 .geMenubarContainer .geItem:hover {
-	background:#eeeeee;
+	background: #FBE6C8;
 }
 .mxDisabled:hover {
 	background:inherit !important;
@@ -336,7 +338,7 @@ div.mxWindow .geButton {
 	padding:6px 0px 6px 14px;
 	margin:0px;
 	cursor:default;
-	background:#eeeeee;
+	background:#91CDF8;
 	white-space:nowrap;
 	overflow:hidden;
 	text-overflow:ellipsis;
@@ -696,7 +698,7 @@ td.mxPopupMenuIcon .geIcon:hover {
 	opacity:1;
 }
 html tr.mxPopupMenuItemHover {
-	background-color: #eeeeee;
+	background-color: #FBE6C8;
 	color: black;
 }
 table.mxPopupMenu hr {

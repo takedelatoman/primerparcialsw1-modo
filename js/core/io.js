@@ -19,8 +19,6 @@ const sockets = {};
 const users = [];
 //un usuario puede tener varios navegadores abiertos.
 
-
-
 const addUser = (id, name, room) => {
   const existingUser = users.find(user => user.id.trim().toLowerCase() === id.trim().toLowerCase());
   if (!name && !room) return { error: "Username and room are required" }
@@ -37,7 +35,6 @@ const deleteUser = (id) => {
   if (index !== -1) return users.splice(index, 1)[0];
 }
 
-
 const findRoom = (room) => {
   let ok = false;
   Object.keys(roomGraphXmls).forEach((room_id) => {
@@ -47,9 +44,7 @@ const findRoom = (room) => {
     }
   });
   return ok;
-
 }
-
 
 const getUsersInRoom = (room) => {
   let usersInRoom = [];
@@ -57,10 +52,8 @@ const getUsersInRoom = (room) => {
     if (user.room == room) {
       usersInRoom.push(user);
     }
-
   });
   return usersInRoom;
-
 }
 
 // Socket Server
@@ -92,7 +85,11 @@ io.on('connection', (socket) => {
         if (!findRoom(room)) {
           roomGraphXmls[room] = responseProject.data.content || xmlString;
         }
+
+        console.log("api cargar salas");
+        console.log(room);
         xmlString = roomGraphXmls[room];
+        console.log(xmlString);
         // join to room
         socket.join(user.room);
         // load_room title users
@@ -102,32 +99,33 @@ io.on('connection', (socket) => {
         // load draw_components 
         socket.emit('draw_component', { xml: xmlString });
       }
-
     } else {
       socket.emit('error_server', { error: true });
     }
 
   });
 
-
+//carga el xml
   socket.on('draw_component', (data) => {
-
     if (data.room) {
       roomGraphXmls[data.room] = data.xml;
     }
-
+    console.log('on draw_component');
+    console.log(data.room);
+    console.log(data.xml);
     socket.in(data.room).emit('draw_component', data);
   });
 
   socket.on('save_component', async (data) => {
-
     if (findRoom(data.room)) {
-
       // llamar al metodo para guardar el diagrama.
       // armo el body con el xml del diagrama
       const body = {
         content: roomGraphXmls[data.room]
       }
+      console.log('gaurdar diagrama');
+      console.log(body.content);
+      console.log("###########################");
       // TODO: CAMBIAR A LA URL DE MI API
       const response = await axios.put('http://localhost:5000/apis/guardar-diagrama/' + data.room, body);
       //console.log(response.status);
@@ -161,8 +159,6 @@ io.on('connection', (socket) => {
 
         deleteUser(user.id);
         io.in(user.room).emit('remove_user_room', { userToRemove: user });
-
-
       }
 
     }

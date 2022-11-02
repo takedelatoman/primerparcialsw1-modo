@@ -5,21 +5,17 @@
 /**
  * Registers shapes.
  */
-(function()
-{
+(function () {
 	// Cube Shape, supports size style
-	function CubeShape()
-	{
+	function CubeShape() {
 		mxCylinder.call(this);
 	};
 	mxUtils.extend(CubeShape, mxCylinder);
 	CubeShape.prototype.size = 20;
-	CubeShape.prototype.redrawPath = function(path, x, y, w, h, isForeground)
-	{
+	CubeShape.prototype.redrawPath = function (path, x, y, w, h, isForeground) {
 		var s = Math.max(0, Math.min(w, Math.min(h, parseFloat(mxUtils.getValue(this.style, 'size', this.size)))));
 
-		if (isForeground)
-		{
+		if (isForeground) {
 			path.moveTo(s, h);
 			path.lineTo(s, s);
 			path.lineTo(0, 0);
@@ -27,8 +23,7 @@
 			path.lineTo(w, s);
 			path.end();
 		}
-		else
-		{
+		else {
 			path.moveTo(0, 0);
 			path.lineTo(w - s, 0);
 			path.lineTo(w, s);
@@ -42,19 +37,17 @@
 	};
 
 	mxCellRenderer.prototype.defaultShapes['cube'] = CubeShape;
-	
+
 	var tan30 = Math.tan(mxUtils.toRadians(30));
 	var tan30Dx = (0.5 - tan30) / 2;
-	
+
 	// Cube Shape, supports size style
-	function IsoRectangleShape()
-	{
+	function IsoRectangleShape() {
 		mxActor.call(this);
 	};
 	mxUtils.extend(IsoRectangleShape, mxActor);
 	IsoRectangleShape.prototype.size = 20;
-	IsoRectangleShape.prototype.redrawPath = function(path, x, y, w, h)
-	{
+	IsoRectangleShape.prototype.redrawPath = function (path, x, y, w, h) {
 		var m = Math.min(w, h / tan30);
 
 		path.translate((w - m) / 2, (h - m) / 2 + m / 4);
@@ -70,18 +63,15 @@
 	mxCellRenderer.prototype.defaultShapes['isoRectangle'] = IsoRectangleShape;
 
 	// Cube Shape, supports size style
-	function IsoCubeShape()
-	{
+	function IsoCubeShape() {
 		mxCylinder.call(this);
 	};
 	mxUtils.extend(IsoCubeShape, mxCylinder);
 	IsoCubeShape.prototype.size = 20;
-	IsoCubeShape.prototype.redrawPath = function(path, x, y, w, h, isForeground)
-	{
+	IsoCubeShape.prototype.redrawPath = function (path, x, y, w, h, isForeground) {
 		var m = Math.min(w, h / (0.5 + tan30));
 
-		if (isForeground)
-		{
+		if (isForeground) {
 			path.moveTo(0, 0.25 * m);
 			path.lineTo(0.5 * m, (0.5 - tan30Dx) * m);
 			path.lineTo(m, 0.25 * m);
@@ -89,8 +79,7 @@
 			path.lineTo(0.5 * m, (1 - tan30Dx) * m);
 			path.end();
 		}
-		else
-		{
+		else {
 			path.translate((w - m) / 2, (h - m) / 2);
 			path.moveTo(0, 0.25 * m);
 			path.lineTo(0.5 * m, m * tan30Dx);
@@ -104,57 +93,50 @@
 	};
 
 	mxCellRenderer.prototype.defaultShapes['isoCube'] = IsoCubeShape;
-	
+
 	// DataStore Shape, supports size style
-	function DataStoreShape()
-	{
+	function DataStoreShape() {
 		mxCylinder.call(this);
 	};
 	mxUtils.extend(DataStoreShape, mxCylinder);
 
-	DataStoreShape.prototype.redrawPath = function(c, x, y, w, h, isForeground)
-	{
+	DataStoreShape.prototype.redrawPath = function (c, x, y, w, h, isForeground) {
 		var dy = Math.min(h / 2, Math.round(h / 8) + this.strokewidth - 1);
-		
-		if ((isForeground && this.fill != null) || (!isForeground && this.fill == null))
-		{
+
+		if ((isForeground && this.fill != null) || (!isForeground && this.fill == null)) {
 			c.moveTo(0, dy);
 			c.curveTo(0, 2 * dy, w, 2 * dy, w, dy);
-			
+
 			// Needs separate shapes for correct hit-detection
-			if (!isForeground)
-			{
+			if (!isForeground) {
 				c.stroke();
 				c.begin();
 			}
-			
+
 			c.translate(0, dy / 2);
 			c.moveTo(0, dy);
 			c.curveTo(0, 2 * dy, w, 2 * dy, w, dy);
-			
+
 			// Needs separate shapes for correct hit-detection
-			if (!isForeground)
-			{
+			if (!isForeground) {
 				c.stroke();
 				c.begin();
 			}
-			
+
 			c.translate(0, dy / 2);
 			c.moveTo(0, dy);
 			c.curveTo(0, 2 * dy, w, 2 * dy, w, dy);
-			
+
 			// Needs separate shapes for correct hit-detection
-			if (!isForeground)
-			{
+			if (!isForeground) {
 				c.stroke();
 				c.begin();
 			}
-			
+
 			c.translate(0, -dy);
 		}
-		
-		if (!isForeground)
-		{
+
+		if (!isForeground) {
 			c.moveTo(0, dy);
 			c.curveTo(0, -dy / 3, w, -dy / 3, w, dy);
 			c.lineTo(w, h - dy);
@@ -162,58 +144,49 @@
 			c.close();
 		}
 	};
-	DataStoreShape.prototype.getLabelBounds = function(rect)
-	{
+	DataStoreShape.prototype.getLabelBounds = function (rect) {
 		var dy = 2.5 * Math.min(rect.height / 2, Math.round(rect.height / 8) + this.strokewidth - 1);
 
 		if ((!this.flipV && (this.direction == null || this.direction == mxConstants.DIRECTION_EAST) ||
-			(this.flipV && this.direction == mxConstants.DIRECTION_WEST)))
-		{
+			(this.flipV && this.direction == mxConstants.DIRECTION_WEST))) {
 			rect.y += dy;
 			rect.height -= dy;
 		}
 		else if ((!this.flipV && this.direction == mxConstants.DIRECTION_SOUTH) ||
-				((this.flipV && this.direction == mxConstants.DIRECTION_NORTH)))
-		{
+			((this.flipV && this.direction == mxConstants.DIRECTION_NORTH))) {
 			rect.width -= dy;
 		}
 		else if ((!this.flipV && this.direction == mxConstants.DIRECTION_WEST) ||
-				(this.flipV && (this.direction == null || this.direction == mxConstants.DIRECTION_EAST)))
-		{
+			(this.flipV && (this.direction == null || this.direction == mxConstants.DIRECTION_EAST))) {
 			rect.height -= dy;
 		}
 		else if ((!this.flipV && this.direction == mxConstants.DIRECTION_NORTH) ||
-				(this.flipV && this.direction == mxConstants.DIRECTION_SOUTH))
-		{
+			(this.flipV && this.direction == mxConstants.DIRECTION_SOUTH)) {
 			rect.x += dy;
 			rect.width -= dy;
 		}
-		
+
 		return rect;
 	};
 
 	mxCellRenderer.prototype.defaultShapes['datastore'] = DataStoreShape;
 
 	// Note Shape, supports size style
-	function NoteShape()
-	{
+	function NoteShape() {
 		mxCylinder.call(this);
 	};
 	mxUtils.extend(NoteShape, mxCylinder);
 	NoteShape.prototype.size = 30;
-	NoteShape.prototype.redrawPath = function(path, x, y, w, h, isForeground)
-	{
+	NoteShape.prototype.redrawPath = function (path, x, y, w, h, isForeground) {
 		var s = Math.max(0, Math.min(w, Math.min(h, parseFloat(mxUtils.getValue(this.style, 'size', this.size)))));
 
-		if (isForeground)
-		{
+		if (isForeground) {
 			path.moveTo(w - s, 0);
 			path.lineTo(w - s, s);
 			path.lineTo(w, s);
 			path.end();
 		}
-		else
-		{
+		else {
 			path.moveTo(0, 0);
 			path.lineTo(w - s, 0);
 			path.lineTo(w, s);
@@ -228,16 +201,14 @@
 	mxCellRenderer.prototype.defaultShapes['note'] = NoteShape;
 
 	// Note Shape, supports size style
-	function SwitchShape()
-	{
+	function SwitchShape() {
 		mxActor.call(this);
 	};
 	mxUtils.extend(SwitchShape, mxActor);
-	SwitchShape.prototype.redrawPath = function(c, x, y, w, h)
-	{
+	SwitchShape.prototype.redrawPath = function (c, x, y, w, h) {
 		var curve = 0.5;
 		c.moveTo(0, 0);
-		c.quadTo(w / 2, h * curve,  w, 0);
+		c.quadTo(w / 2, h * curve, w, 0);
 		c.quadTo(w * (1 - curve), h / 2, w, h);
 		c.quadTo(w / 2, h * (1 - curve), 0, h);
 		c.quadTo(w * curve, h / 2, 0, 0);
@@ -247,54 +218,46 @@
 	mxCellRenderer.prototype.defaultShapes['switch'] = SwitchShape;
 
 	// Folder Shape, supports tabWidth, tabHeight styles
-	function FolderShape()
-	{
+	function FolderShape() {
 		mxCylinder.call(this);
 	};
 	mxUtils.extend(FolderShape, mxCylinder);
 	FolderShape.prototype.tabWidth = 60;
 	FolderShape.prototype.tabHeight = 20;
 	FolderShape.prototype.tabPosition = 'right';
-	FolderShape.prototype.redrawPath = function(path, x, y, w, h, isForeground)
-	{
+	FolderShape.prototype.redrawPath = function (path, x, y, w, h, isForeground) {
 		var dx = Math.max(0, Math.min(w, parseFloat(mxUtils.getValue(this.style, 'tabWidth', this.tabWidth))));
 		var dy = Math.max(0, Math.min(h, parseFloat(mxUtils.getValue(this.style, 'tabHeight', this.tabHeight))));
 		var tp = mxUtils.getValue(this.style, 'tabPosition', this.tabPosition);
 
-		if (isForeground)
-		{
-			if (tp == 'left')
-			{
+		if (isForeground) {
+			if (tp == 'left') {
 				path.moveTo(0, dy);
 				path.lineTo(dx, dy);
 			}
 			// Right is default
-			else
-			{
+			else {
 				path.moveTo(w - dx, dy);
 				path.lineTo(w, dy);
 			}
-			
+
 			path.end();
 		}
-		else
-		{
-			if (tp == 'left')
-			{
+		else {
+			if (tp == 'left') {
 				path.moveTo(0, 0);
 				path.lineTo(dx, 0);
 				path.lineTo(dx, dy);
 				path.lineTo(w, dy);
 			}
 			// Right is default
-			else
-			{
+			else {
 				path.moveTo(0, dy);
 				path.lineTo(w - dx, dy);
 				path.lineTo(w - dx, 0);
 				path.lineTo(w, 0);
 			}
-			
+
 			path.lineTo(w, h);
 			path.lineTo(0, h);
 			path.lineTo(0, dy);
@@ -306,35 +269,31 @@
 	mxCellRenderer.prototype.defaultShapes['folder'] = FolderShape;
 
 	// Card shape
-	function CardShape()
-	{
+	function CardShape() {
 		mxActor.call(this);
 	};
 	mxUtils.extend(CardShape, mxActor);
 	CardShape.prototype.size = 30;
-	CardShape.prototype.redrawPath = function(c, x, y, w, h)
-	{
+	CardShape.prototype.redrawPath = function (c, x, y, w, h) {
 		var s = Math.max(0, Math.min(w, Math.min(h, parseFloat(mxUtils.getValue(this.style, 'size', this.size)))));
 		var arcSize = mxUtils.getValue(this.style, mxConstants.STYLE_ARCSIZE, mxConstants.LINE_ARCSIZE) / 2;
 		this.addPoints(c, [new mxPoint(s, 0), new mxPoint(w, 0), new mxPoint(w, h), new mxPoint(0, h), new mxPoint(0, s)],
-				this.isRounded, arcSize, true);
+			this.isRounded, arcSize, true);
 		c.end();
 	};
 
 	mxCellRenderer.prototype.defaultShapes['card'] = CardShape;
 
 	// Tape shape
-	function TapeShape()
-	{
+	function TapeShape() {
 		mxActor.call(this);
 	};
 	mxUtils.extend(TapeShape, mxActor);
 	TapeShape.prototype.size = 0.4;
-	TapeShape.prototype.redrawPath = function(c, x, y, w, h)
-	{
+	TapeShape.prototype.redrawPath = function (c, x, y, w, h) {
 		var dy = h * Math.max(0, Math.min(1, parseFloat(mxUtils.getValue(this.style, 'size', this.size))));
 		var fy = 1.4;
-		
+
 		c.moveTo(0, dy / 2);
 		c.quadTo(w / 4, dy * fy, w / 2, dy / 2);
 		c.quadTo(w * 3 / 4, dy * (1 - fy), w, dy / 2);
@@ -349,17 +308,15 @@
 	mxCellRenderer.prototype.defaultShapes['tape'] = TapeShape;
 
 	// Document shape
-	function DocumentShape()
-	{
+	function DocumentShape() {
 		mxActor.call(this);
 	};
 	mxUtils.extend(DocumentShape, mxActor);
 	DocumentShape.prototype.size = 0.3;
-	DocumentShape.prototype.redrawPath = function(c, x, y, w, h)
-	{
+	DocumentShape.prototype.redrawPath = function (c, x, y, w, h) {
 		var dy = h * Math.max(0, Math.min(1, parseFloat(mxUtils.getValue(this.style, 'size', this.size))));
 		var fy = 1.4;
-		
+
 		c.moveTo(0, 0);
 		c.lineTo(w, 0);
 		c.lineTo(w, h - dy / 2);
@@ -373,68 +330,60 @@
 	mxCellRenderer.prototype.defaultShapes['document'] = DocumentShape;
 
 	// Parallelogram shape
-	function ParallelogramShape()
-	{
+	function ParallelogramShape() {
 		mxActor.call(this);
 	};
 	mxUtils.extend(ParallelogramShape, mxActor);
 	ParallelogramShape.prototype.size = 0.2;
-	ParallelogramShape.prototype.redrawPath = function(c, x, y, w, h)
-	{
+	ParallelogramShape.prototype.redrawPath = function (c, x, y, w, h) {
 		var dx = w * Math.max(0, Math.min(1, parseFloat(mxUtils.getValue(this.style, 'size', this.size))));
 		var arcSize = mxUtils.getValue(this.style, mxConstants.STYLE_ARCSIZE, mxConstants.LINE_ARCSIZE) / 2;
 		this.addPoints(c, [new mxPoint(0, h), new mxPoint(dx, 0), new mxPoint(w, 0), new mxPoint(w - dx, h)],
-				this.isRounded, arcSize, true);
+			this.isRounded, arcSize, true);
 		c.end();
 	};
 
 	mxCellRenderer.prototype.defaultShapes['parallelogram'] = ParallelogramShape;
 
 	// Trapezoid shape
-	function TrapezoidShape()
-	{
+	function TrapezoidShape() {
 		mxActor.call(this);
 	};
 	mxUtils.extend(TrapezoidShape, mxActor);
 	TrapezoidShape.prototype.size = 0.2;
-	TrapezoidShape.prototype.redrawPath = function(c, x, y, w, h)
-	{
+	TrapezoidShape.prototype.redrawPath = function (c, x, y, w, h) {
 		var dx = w * Math.max(0, Math.min(0.5, parseFloat(mxUtils.getValue(this.style, 'size', this.size))));
 		var arcSize = mxUtils.getValue(this.style, mxConstants.STYLE_ARCSIZE, mxConstants.LINE_ARCSIZE) / 2;
 		this.addPoints(c, [new mxPoint(0, h), new mxPoint(dx, 0), new mxPoint(w - dx, 0), new mxPoint(w, h)],
-				this.isRounded, arcSize, true);
+			this.isRounded, arcSize, true);
 	};
 
 	mxCellRenderer.prototype.defaultShapes['trapezoid'] = TrapezoidShape;
 
 	// Curly Bracket shape
-	function CurlyBracketShape()
-	{
+	function CurlyBracketShape() {
 		mxActor.call(this);
 	};
 	mxUtils.extend(CurlyBracketShape, mxActor);
 	CurlyBracketShape.prototype.size = 0.5;
-	CurlyBracketShape.prototype.redrawPath = function(c, x, y, w, h)
-	{
+	CurlyBracketShape.prototype.redrawPath = function (c, x, y, w, h) {
 		c.setFillColor(null);
 		var s = w * Math.max(0, Math.min(1, parseFloat(mxUtils.getValue(this.style, 'size', this.size))));
 		var arcSize = mxUtils.getValue(this.style, mxConstants.STYLE_ARCSIZE, mxConstants.LINE_ARCSIZE) / 2;
 		this.addPoints(c, [new mxPoint(w, 0), new mxPoint(s, 0), new mxPoint(s, h / 2),
-		                   new mxPoint(0, h / 2), new mxPoint(s, h / 2), new mxPoint(s, h),
-		                   new mxPoint(w, h)], this.isRounded, arcSize, false);
+		new mxPoint(0, h / 2), new mxPoint(s, h / 2), new mxPoint(s, h),
+		new mxPoint(w, h)], this.isRounded, arcSize, false);
 		c.end();
 	};
 
 	mxCellRenderer.prototype.defaultShapes['curlyBracket'] = CurlyBracketShape;
 
 	// Parallel marker shape
-	function ParallelMarkerShape()
-	{
+	function ParallelMarkerShape() {
 		mxActor.call(this);
 	};
 	mxUtils.extend(ParallelMarkerShape, mxActor);
-	ParallelMarkerShape.prototype.redrawPath = function(c, x, y, w, h)
-	{
+	ParallelMarkerShape.prototype.redrawPath = function (c, x, y, w, h) {
 		c.setStrokeWidth(1);
 		c.setFillColor(this.stroke);
 		var w2 = w / 5;
@@ -451,165 +400,147 @@
 	/**
 	 * Adds handJiggle style (jiggle=n sets jiggle)
 	 */
-	function HandJiggle(canvas, defaultVariation)
-	{
+	function HandJiggle(canvas, defaultVariation) {
 		this.canvas = canvas;
-		
+
 		// Avoids "spikes" in the output
 		this.canvas.setLineJoin('round');
 		this.canvas.setLineCap('round');
-		
+
 		this.defaultVariation = defaultVariation;
-		
+
 		this.originalLineTo = this.canvas.lineTo;
 		this.canvas.lineTo = mxUtils.bind(this, HandJiggle.prototype.lineTo);
-		
+
 		this.originalMoveTo = this.canvas.moveTo;
 		this.canvas.moveTo = mxUtils.bind(this, HandJiggle.prototype.moveTo);
-		
+
 		this.originalClose = this.canvas.close;
 		this.canvas.close = mxUtils.bind(this, HandJiggle.prototype.close);
-		
+
 		this.originalQuadTo = this.canvas.quadTo;
 		this.canvas.quadTo = mxUtils.bind(this, HandJiggle.prototype.quadTo);
-		
+
 		this.originalCurveTo = this.canvas.curveTo;
 		this.canvas.curveTo = mxUtils.bind(this, HandJiggle.prototype.curveTo);
-		
+
 		this.originalArcTo = this.canvas.arcTo;
 		this.canvas.arcTo = mxUtils.bind(this, HandJiggle.prototype.arcTo);
 	};
-	
-	HandJiggle.prototype.moveTo = function(endX, endY)
-	{
+
+	HandJiggle.prototype.moveTo = function (endX, endY) {
 		this.originalMoveTo.apply(this.canvas, arguments);
 		this.lastX = endX;
 		this.lastY = endY;
 		this.firstX = endX;
 		this.firstY = endY;
 	};
-	
-	HandJiggle.prototype.close = function()
-	{
-		if (this.firstX != null && this.firstY != null)
-		{
+
+	HandJiggle.prototype.close = function () {
+		if (this.firstX != null && this.firstY != null) {
 			this.lineTo(this.firstX, this.firstY);
 			this.originalClose.apply(this.canvas, arguments);
 		}
-		
+
 		this.originalClose.apply(this.canvas, arguments);
 	};
-	
-	HandJiggle.prototype.quadTo = function(x1, y1, x2, y2)
-	{
+
+	HandJiggle.prototype.quadTo = function (x1, y1, x2, y2) {
 		this.originalQuadTo.apply(this.canvas, arguments);
 		this.lastX = x2;
 		this.lastY = y2;
 	};
-	
-	HandJiggle.prototype.curveTo = function(x1, y1, x2, y2, x3, y3)
-	{
+
+	HandJiggle.prototype.curveTo = function (x1, y1, x2, y2, x3, y3) {
 		this.originalCurveTo.apply(this.canvas, arguments);
 		this.lastX = x3;
 		this.lastY = y3;
 	};
-	
-	HandJiggle.prototype.arcTo = function(rx, ry, angle, largeArcFlag, sweepFlag, x, y)
-	{
+
+	HandJiggle.prototype.arcTo = function (rx, ry, angle, largeArcFlag, sweepFlag, x, y) {
 		this.originalArcTo.apply(this.canvas, arguments);
 		this.lastX = x;
 		this.lastY = y;
 	};
 
-	HandJiggle.prototype.lineTo = function(endX, endY)
-	{
+	HandJiggle.prototype.lineTo = function (endX, endY) {
 		// LATER: Check why this.canvas.lastX cannot be used
-		if (this.lastX != null && this.lastY != null)
-		{
+		if (this.lastX != null && this.lastY != null) {
 			var dx = Math.abs(endX - this.lastX);
 			var dy = Math.abs(endY - this.lastY);
 			var dist = Math.sqrt(dx * dx + dy * dy);
-			
-			if (dist < 2)
-			{
+
+			if (dist < 2) {
 				this.originalLineTo.apply(this.canvas, arguments);
 				this.lastX = endX;
 				this.lastY = endY;
-				
+
 				return;
 			}
-	
+
 			var segs = Math.round(dist / 10);
 			var variation = this.defaultVariation;
-			
-			if (segs < 5)
-			{
+
+			if (segs < 5) {
 				segs = 5;
 				variation /= 3;
 			}
-			
-			function sign(x)
-			{
-			    return typeof x === 'number' ? x ? x < 0 ? -1 : 1 : x === x ? 0 : NaN : NaN;
+
+			function sign(x) {
+				return typeof x === 'number' ? x ? x < 0 ? -1 : 1 : x === x ? 0 : NaN : NaN;
 			}
-	
+
 			var stepX = sign(endX - this.lastX) * dx / segs;
 			var stepY = sign(endY - this.lastY) * dy / segs;
-	
+
 			var fx = dx / dist;
 			var fy = dy / dist;
-	
-			for (var s = 0; s < segs; s++)
-			{
+
+			for (var s = 0; s < segs; s++) {
 				var x = stepX * s + this.lastX;
 				var y = stepY * s + this.lastY;
-	
+
 				var offset = (Math.random() - 0.5) * variation;
 				this.originalLineTo.call(this.canvas, x - offset * fy, y - offset * fx);
 			}
-			
+
 			this.originalLineTo.call(this.canvas, endX, endY);
 			this.lastX = endX;
 			this.lastY = endY;
 		}
-		else
-		{
+		else {
 			this.originalLineTo.apply(this.canvas, arguments);
 			this.lastX = endX;
 			this.lastY = endY;
 		}
 	};
-	
-	HandJiggle.prototype.destroy = function()
-	{
-		 this.canvas.lineTo = this.originalLineTo;
-		 this.canvas.moveTo = this.originalMoveTo;
-		 this.canvas.close = this.originalClose;
-		 this.canvas.quadTo = this.originalQuadTo;
-		 this.canvas.curveTo = this.originalCurveTo;
-		 this.canvas.arcTo = this.originalArcTo;
+
+	HandJiggle.prototype.destroy = function () {
+		this.canvas.lineTo = this.originalLineTo;
+		this.canvas.moveTo = this.originalMoveTo;
+		this.canvas.close = this.originalClose;
+		this.canvas.quadTo = this.originalQuadTo;
+		this.canvas.curveTo = this.originalCurveTo;
+		this.canvas.arcTo = this.originalArcTo;
 	};
-	
+
 	// Installs hand jiggle in all shapes
 	var mxShapePaint0 = mxShape.prototype.paint;
 	mxShape.prototype.defaultJiggle = 1.5;
-	mxShape.prototype.paint = function(c)
-	{
+	mxShape.prototype.paint = function (c) {
 		// NOTE: getValue does not return a boolean value so !('0') would return true here and below
-		if (this.style != null && mxUtils.getValue(this.style, 'comic', '0') != '0' && c.handHiggle == null)
-		{
+		if (this.style != null && mxUtils.getValue(this.style, 'comic', '0') != '0' && c.handHiggle == null) {
 			c.handJiggle = new HandJiggle(c, mxUtils.getValue(this.style, 'jiggle', this.defaultJiggle));
 		}
-		
+
 		mxShapePaint0.apply(this, arguments);
-		
-		if (c.handJiggle != null)
-		{
+
+		if (c.handJiggle != null) {
 			c.handJiggle.destroy();
 			delete c.handJiggle;
 		}
 	};
-	
+
 	// Sets default jiggle for diamond
 	mxRhombus.prototype.defaultJiggle = 2;
 
@@ -617,40 +548,32 @@
 	 * Overrides to avoid call to rect
 	 */
 	var mxRectangleShapeIsHtmlAllowed0 = mxRectangleShape.prototype.isHtmlAllowed;
-	mxRectangleShape.prototype.isHtmlAllowed = function()
-	{
+	mxRectangleShape.prototype.isHtmlAllowed = function () {
 		return (this.style == null || mxUtils.getValue(this.style, 'comic', '0') == '0') &&
 			mxRectangleShapeIsHtmlAllowed0.apply(this, arguments);
 	};
-	
+
 	var mxRectangleShapePaintBackground0 = mxRectangleShape.prototype.paintBackground;
-	mxRectangleShape.prototype.paintBackground = function(c, x, y, w, h)
-	{
-		if (c.handJiggle == null)
-		{
+	mxRectangleShape.prototype.paintBackground = function (c, x, y, w, h) {
+		if (c.handJiggle == null) {
 			mxRectangleShapePaintBackground0.apply(this, arguments);
 		}
-		else
-		{
+		else {
 			var events = true;
-			
-			if (this.style != null)
-			{
-				events = mxUtils.getValue(this.style, mxConstants.STYLE_POINTER_EVENTS, '1') == '1';		
+
+			if (this.style != null) {
+				events = mxUtils.getValue(this.style, mxConstants.STYLE_POINTER_EVENTS, '1') == '1';
 			}
-			
+
 			if (events || (this.fill != null && this.fill != mxConstants.NONE) ||
-				(this.stroke != null && this.stroke != mxConstants.NONE))
-			{
-				if (!events && (this.fill == null || this.fill == mxConstants.NONE))
-				{
+				(this.stroke != null && this.stroke != mxConstants.NONE)) {
+				if (!events && (this.fill == null || this.fill == mxConstants.NONE)) {
 					c.pointerEvents = false;
 				}
-				
+
 				c.begin();
-				
-				if (this.isRounded)
-				{
+
+				if (this.isRounded) {
 					var f = mxUtils.getValue(this.style, mxConstants.STYLE_ARCSIZE,
 						mxConstants.RECTANGLE_ROUNDING_FACTOR * 100) / 100;
 					var r = Math.min(w * f, h * f);
@@ -664,22 +587,21 @@
 					c.lineTo(x, y + r);
 					c.quadTo(x, y, x + r, y);
 				}
-				else
-				{
-					
+				else {
+
 					c.moveTo(x, y);
 					c.lineTo(x + w, y);
 					c.lineTo(x + w, y + h);
 					c.lineTo(x, y + h);
 					c.lineTo(x, y);
 				}
-				
+
 				// LATER: Check if close is needed here
 				c.close();
 				c.end();
-				
+
 				c.fillAndStroke();
-			}			
+			}
 		}
 	};
 
@@ -687,66 +609,57 @@
 	 * Disables glass effect with hand jiggle.
 	 */
 	var mxRectangleShapePaintForeground0 = mxRectangleShape.prototype.paintForeground;
-	mxRectangleShape.prototype.paintForeground = function(c, x, y, w, h)
-	{
-		if (c.handJiggle == null)
-		{
+	mxRectangleShape.prototype.paintForeground = function (c, x, y, w, h) {
+		if (c.handJiggle == null) {
 			mxRectangleShapePaintForeground0.apply(this, arguments);
 		}
 	};
 
 	// End of hand jiggle integration
-	
+
 	// Process Shape
-	function ProcessShape()
-	{
+	function ProcessShape() {
 		mxRectangleShape.call(this);
 	};
 	mxUtils.extend(ProcessShape, mxRectangleShape);
 	ProcessShape.prototype.size = 0.1;
-	ProcessShape.prototype.isHtmlAllowed = function()
-	{
+	ProcessShape.prototype.isHtmlAllowed = function () {
 		return false;
 	};
-	ProcessShape.prototype.getLabelBounds = function(rect)
-	{
+	ProcessShape.prototype.getLabelBounds = function (rect) {
 		if (mxUtils.getValue(this.state.style, mxConstants.STYLE_HORIZONTAL, true) ==
 			(this.direction == null ||
-			this.direction == mxConstants.DIRECTION_EAST ||
-			this.direction == mxConstants.DIRECTION_WEST))
-		{
+				this.direction == mxConstants.DIRECTION_EAST ||
+				this.direction == mxConstants.DIRECTION_WEST)) {
 			var w = rect.width;
 			var h = rect.height;
 			var r = new mxRectangle(rect.x, rect.y, w, h);
-	
+
 			var inset = w * Math.max(0, Math.min(1, parseFloat(mxUtils.getValue(this.style, 'size', this.size))));
-	
-			if (this.isRounded)
-			{
+
+			if (this.isRounded) {
 				var f = mxUtils.getValue(this.style, mxConstants.STYLE_ARCSIZE,
 					mxConstants.RECTANGLE_ROUNDING_FACTOR * 100) / 100;
 				inset = Math.max(inset, Math.min(w * f, h * f));
 			}
-			
+
 			r.x += inset;
 			r.width -= 2 * inset;
-			
+
 			return r;
 		}
-		
+
 		return rect;
 	};
-	ProcessShape.prototype.paintForeground = function(c, x, y, w, h)
-	{
+	ProcessShape.prototype.paintForeground = function (c, x, y, w, h) {
 		var inset = w * Math.max(0, Math.min(1, parseFloat(mxUtils.getValue(this.style, 'size', this.size))));
 
-		if (this.isRounded)
-		{
+		if (this.isRounded) {
 			var f = mxUtils.getValue(this.style, mxConstants.STYLE_ARCSIZE,
 				mxConstants.RECTANGLE_ROUNDING_FACTOR * 100) / 100;
 			inset = Math.max(inset, Math.min(w * f, h * f));
 		}
-		
+
 		c.begin();
 		c.moveTo(x + inset, y);
 		c.lineTo(x + inset, y + h);
@@ -760,54 +673,47 @@
 	mxCellRenderer.prototype.defaultShapes['process'] = ProcessShape;
 
 	// Step shape
-	function StepShape()
-	{
+	function StepShape() {
 		mxActor.call(this);
 	};
 	mxUtils.extend(StepShape, mxActor);
 	StepShape.prototype.size = 0.2;
-	StepShape.prototype.redrawPath = function(c, x, y, w, h)
-	{
-		var s =  w * Math.max(0, Math.min(1, parseFloat(mxUtils.getValue(this.style, 'size', this.size))));
+	StepShape.prototype.redrawPath = function (c, x, y, w, h) {
+		var s = w * Math.max(0, Math.min(1, parseFloat(mxUtils.getValue(this.style, 'size', this.size))));
 		var arcSize = mxUtils.getValue(this.style, mxConstants.STYLE_ARCSIZE, mxConstants.LINE_ARCSIZE) / 2;
 		this.addPoints(c, [new mxPoint(0, 0), new mxPoint(w - s, 0), new mxPoint(w, h / 2), new mxPoint(w - s, h),
-		                   new mxPoint(0, h), new mxPoint(s, h / 2)], this.isRounded, arcSize, true);
+		new mxPoint(0, h), new mxPoint(s, h / 2)], this.isRounded, arcSize, true);
 		c.end();
 	};
 
 	mxCellRenderer.prototype.defaultShapes['step'] = StepShape;
 
 	// Hexagon shape
-	function HexagonShape()
-	{
+	function HexagonShape() {
 		mxActor.call(this);
 	};
 	mxUtils.extend(HexagonShape, mxHexagon);
 	HexagonShape.prototype.size = 0.25;
-	HexagonShape.prototype.redrawPath = function(c, x, y, w, h)
-	{
-		var s =  w * Math.max(0, Math.min(1, parseFloat(mxUtils.getValue(this.style, 'size', this.size))));
+	HexagonShape.prototype.redrawPath = function (c, x, y, w, h) {
+		var s = w * Math.max(0, Math.min(1, parseFloat(mxUtils.getValue(this.style, 'size', this.size))));
 		var arcSize = mxUtils.getValue(this.style, mxConstants.STYLE_ARCSIZE, mxConstants.LINE_ARCSIZE) / 2;
 		this.addPoints(c, [new mxPoint(s, 0), new mxPoint(w - s, 0), new mxPoint(w, 0.5 * h), new mxPoint(w - s, h),
-		                   new mxPoint(s, h), new mxPoint(0, 0.5 * h)], this.isRounded, arcSize, true);
+		new mxPoint(s, h), new mxPoint(0, 0.5 * h)], this.isRounded, arcSize, true);
 	};
 
 	mxCellRenderer.prototype.defaultShapes['hexagon'] = HexagonShape;
 
 	// Plus Shape
-	function PlusShape()
-	{
+	function PlusShape() {
 		mxRectangleShape.call(this);
 	};
 	mxUtils.extend(PlusShape, mxRectangleShape);
-	PlusShape.prototype.isHtmlAllowed = function()
-	{
+	PlusShape.prototype.isHtmlAllowed = function () {
 		return false;
 	};
-	PlusShape.prototype.paintForeground = function(c, x, y, w, h)
-	{
+	PlusShape.prototype.paintForeground = function (c, x, y, w, h) {
 		var border = Math.min(w / 5, h / 5) + 1;
-		
+
 		c.begin();
 		c.moveTo(x + w / 2, y + border);
 		c.lineTo(x + w / 2, y + h - border);
@@ -819,36 +725,31 @@
 	};
 
 	mxCellRenderer.prototype.defaultShapes['plus'] = PlusShape;
-	
+
 	// Overrides painting of rhombus shape to allow for double style
 	var mxRhombusPaintVertexShape = mxRhombus.prototype.paintVertexShape;
-	mxRhombus.prototype.getLabelBounds = function(rect)
-	{
-		if (this.style['double'] == 1)
-		{
+	mxRhombus.prototype.getLabelBounds = function (rect) {
+		if (this.style['double'] == 1) {
 			var margin = (Math.max(2, this.strokewidth + 1) * 2 + parseFloat(this.style[mxConstants.STYLE_MARGIN] || 0)) * this.scale;
-		
+
 			return new mxRectangle(rect.x + margin, rect.y + margin, rect.width - 2 * margin, rect.height - 2 * margin);
 		}
-		
+
 		return rect;
 	};
-	mxRhombus.prototype.paintVertexShape = function(c, x, y, w, h)
-	{
+	mxRhombus.prototype.paintVertexShape = function (c, x, y, w, h) {
 		mxRhombusPaintVertexShape.apply(this, arguments);
 
-		if (!this.outline && this.style['double'] == 1)
-		{
+		if (!this.outline && this.style['double'] == 1) {
 			var margin = Math.max(2, this.strokewidth + 1) * 2 + parseFloat(this.style[mxConstants.STYLE_MARGIN] || 0);
 			x += margin;
 			y += margin;
 			w -= 2 * margin;
 			h -= 2 * margin;
-			
-			if (w > 0 && h > 0)
-			{
+
+			if (w > 0 && h > 0) {
 				c.setShadow(false);
-				
+
 				// Workaround for closure compiler bug where the lines with x and y above
 				// are removed if arguments is used as second argument in call below.
 				mxRhombusPaintVertexShape.apply(this, [c, x, y, w, h]);
@@ -857,102 +758,85 @@
 	};
 
 	// CompositeShape
-	function ExtendedShape()
-	{
+	function ExtendedShape() {
 		mxRectangleShape.call(this);
 	};
 	mxUtils.extend(ExtendedShape, mxRectangleShape);
-	ExtendedShape.prototype.isHtmlAllowed = function()
-	{
+	ExtendedShape.prototype.isHtmlAllowed = function () {
 		return false;
 	};
-	ExtendedShape.prototype.getLabelBounds = function(rect)
-	{
-		if (this.style['double'] == 1)
-		{
+	ExtendedShape.prototype.getLabelBounds = function (rect) {
+		if (this.style['double'] == 1) {
 			var margin = (Math.max(2, this.strokewidth + 1) + parseFloat(this.style[mxConstants.STYLE_MARGIN] || 0)) * this.scale;
-		
+
 			return new mxRectangle(rect.x + margin, rect.y + margin, rect.width - 2 * margin, rect.height - 2 * margin);
 		}
-		
+
 		return rect;
 	};
-	
-	ExtendedShape.prototype.paintForeground = function(c, x, y, w, h)
-	{
-		if (this.style != null)
-		{
-			if (!this.outline && this.style['double'] == 1)
-			{
+
+	ExtendedShape.prototype.paintForeground = function (c, x, y, w, h) {
+		if (this.style != null) {
+			if (!this.outline && this.style['double'] == 1) {
 				var margin = Math.max(2, this.strokewidth + 1) + parseFloat(this.style[mxConstants.STYLE_MARGIN] || 0);
 				x += margin;
 				y += margin;
 				w -= 2 * margin;
 				h -= 2 * margin;
-				
-				if (w > 0 && h > 0)
-				{
+
+				if (w > 0 && h > 0) {
 					mxRectangleShape.prototype.paintBackground.apply(this, arguments);
 				}
 			}
-			
+
 			c.setDashed(false);
-			
+
 			// Draws the symbols defined in the style. The symbols are
 			// numbered from 1...n. Possible postfixes are align,
 			// verticalAlign, spacing, arcSpacing, width, height
 			var counter = 0;
 			var shape = null;
-			
-			do
-			{
+
+			do {
 				shape = mxCellRenderer.prototype.defaultShapes[this.style['symbol' + counter]];
-				
-				if (shape != null)
-				{
+
+				if (shape != null) {
 					var align = this.style['symbol' + counter + 'Align'];
 					var valign = this.style['symbol' + counter + 'VerticalAlign'];
 					var width = this.style['symbol' + counter + 'Width'];
 					var height = this.style['symbol' + counter + 'Height'];
 					var spacing = this.style['symbol' + counter + 'Spacing'] || 0;
 					var arcspacing = this.style['symbol' + counter + 'ArcSpacing'];
-					
-					if (arcspacing != null)
-					{
+
+					if (arcspacing != null) {
 						spacing += this.getArcSize(w + this.strokewidth, h + this.strokewidth) * arcspacing;
 					}
-					
+
 					var x2 = x;
 					var y2 = y;
-					
-					if (align == mxConstants.ALIGN_CENTER)
-					{
+
+					if (align == mxConstants.ALIGN_CENTER) {
 						x2 += (w - width) / 2;
 					}
-					else if (align == mxConstants.ALIGN_RIGHT)
-					{
+					else if (align == mxConstants.ALIGN_RIGHT) {
 						x2 += w - width - spacing;
 					}
-					else
-					{
+					else {
 						x2 += spacing;
 					}
-					
-					if (valign == mxConstants.ALIGN_MIDDLE)
-					{
+
+					if (valign == mxConstants.ALIGN_MIDDLE) {
 						y2 += (h - height) / 2;
 					}
-					else if (valign == mxConstants.ALIGN_BOTTOM)
-					{
+					else if (valign == mxConstants.ALIGN_BOTTOM) {
 						y2 += h - height - spacing;
 					}
-					else
-					{
+					else {
 						y2 += spacing;
 					}
-					
+
 					c.save();
-					
+
 					// Small hack to pass style along into subshape
 					var tmp = new shape();
 					// TODO: Clone style and override settings (eg. strokewidth)
@@ -960,35 +844,31 @@
 					shape.prototype.paintVertexShape.call(tmp, c, x2, y2, width, height);
 					c.restore();
 				}
-				
+
 				counter++;
 			}
 			while (shape != null);
 		}
-		
+
 		// Paints glass effect
 		mxRectangleShape.prototype.paintForeground.apply(this, arguments);
 	};
 
 	mxCellRenderer.prototype.defaultShapes['ext'] = ExtendedShape;
-	
+
 	// Tape Shape, supports size style
-	function MessageShape()
-	{
+	function MessageShape() {
 		mxCylinder.call(this);
 	};
 	mxUtils.extend(MessageShape, mxCylinder);
-	MessageShape.prototype.redrawPath = function(path, x, y, w, h, isForeground)
-	{
-		if (isForeground)
-		{
+	MessageShape.prototype.redrawPath = function (path, x, y, w, h, isForeground) {
+		if (isForeground) {
 			path.moveTo(0, 0);
 			path.lineTo(w / 2, h / 2);
 			path.lineTo(w, 0);
 			path.end();
 		}
-		else
-		{
+		else {
 			path.moveTo(0, 0);
 			path.lineTo(w, 0);
 			path.lineTo(w, h);
@@ -998,15 +878,13 @@
 	};
 
 	mxCellRenderer.prototype.defaultShapes['message'] = MessageShape;
-	
+
 	// UML Actor Shape
-	function UmlActorShape()
-	{
+	function UmlActorShape() {
 		mxShape.call(this);
 	};
 	mxUtils.extend(UmlActorShape, mxShape);
-	UmlActorShape.prototype.paintBackground = function(c, x, y, w, h)
-	{
+	UmlActorShape.prototype.paintBackground = function (c, x, y, w, h) {
 		c.translate(x, y);
 
 		// Head
@@ -1016,54 +894,51 @@
 		c.begin();
 		c.moveTo(w / 2, h / 4);
 		c.lineTo(w / 2, 2 * h / 3);
-		
+
 		// Arms
 		c.moveTo(w / 2, h / 3);
 		c.lineTo(0, h / 3);
 		c.moveTo(w / 2, h / 3);
 		c.lineTo(w, h / 3);
-		
+
 		// Legs
 		c.moveTo(w / 2, 2 * h / 3);
 		c.lineTo(0, h);
 		c.moveTo(w / 2, 2 * h / 3);
 		c.lineTo(w, h);
 		c.end();
-		
+
 		c.stroke();
 	};
 
 	// Replaces existing actor shape
 	mxCellRenderer.prototype.defaultShapes['umlActor'] = UmlActorShape;
-	
+
 	// UML Boundary Shape
-	function UmlBoundaryShape()
-	{
+	function UmlBoundaryShape() {
 		mxShape.call(this);
 	};
 	mxUtils.extend(UmlBoundaryShape, mxShape);
-	UmlBoundaryShape.prototype.getLabelBounds = function(rect)
-	{
+	UmlBoundaryShape.prototype.getLabelBounds = function (rect) {
 		return new mxRectangle(rect.x + rect.width / 6, rect.y, rect.width * 5 / 6, rect.height);
 	};
-	UmlBoundaryShape.prototype.paintBackground = function(c, x, y, w, h)
-	{
+	UmlBoundaryShape.prototype.paintBackground = function (c, x, y, w, h) {
 		c.translate(x, y);
-		
+
 		// Base line
 		c.begin();
 		c.moveTo(0, h / 4);
 		c.lineTo(0, h * 3 / 4);
 		c.end();
 		c.stroke();
-		
+
 		// Horizontal line
 		c.begin();
 		c.moveTo(0, h / 2);
 		c.lineTo(w / 6, h / 2);
 		c.end();
 		c.stroke();
-		
+
 		// Circle
 		c.ellipse(w / 6, 0, w * 5 / 6, h);
 		c.fillAndStroke();
@@ -1073,15 +948,13 @@
 	mxCellRenderer.prototype.defaultShapes['umlBoundary'] = UmlBoundaryShape;
 
 	// UML Entity Shape
-	function UmlEntityShape()
-	{
+	function UmlEntityShape() {
 		mxEllipse.call(this);
 	};
 	mxUtils.extend(UmlEntityShape, mxEllipse);
-	UmlEntityShape.prototype.paintVertexShape = function(c, x, y, w, h)
-	{
+	UmlEntityShape.prototype.paintVertexShape = function (c, x, y, w, h) {
 		mxEllipse.prototype.paintVertexShape.apply(this, arguments);
-		
+
 		c.begin();
 		c.moveTo(x + w / 8, y + h);
 		c.lineTo(x + w * 7 / 8, y + h);
@@ -1092,13 +965,11 @@
 	mxCellRenderer.prototype.defaultShapes['umlEntity'] = UmlEntityShape;
 
 	// UML Destroy Shape
-	function UmlDestroyShape()
-	{
+	function UmlDestroyShape() {
 		mxShape.call(this);
 	};
 	mxUtils.extend(UmlDestroyShape, mxShape);
-	UmlDestroyShape.prototype.paintVertexShape = function(c, x, y, w, h)
-	{
+	UmlDestroyShape.prototype.paintVertexShape = function (c, x, y, w, h) {
 		c.translate(x, y);
 
 		c.begin();
@@ -1111,19 +982,16 @@
 	};
 
 	mxCellRenderer.prototype.defaultShapes['umlDestroy'] = UmlDestroyShape;
-	
+
 	// UML Control Shape
-	function UmlControlShape()
-	{
+	function UmlControlShape() {
 		mxShape.call(this);
 	};
 	mxUtils.extend(UmlControlShape, mxShape);
-	UmlControlShape.prototype.getLabelBounds = function(rect)
-	{
+	UmlControlShape.prototype.getLabelBounds = function (rect) {
 		return new mxRectangle(rect.x, rect.y + rect.height / 8, rect.width, rect.height * 7 / 8);
 	};
-	UmlControlShape.prototype.paintBackground = function(c, x, y, w, h)
-	{
+	UmlControlShape.prototype.paintBackground = function (c, x, y, w, h) {
 		c.translate(x, y);
 
 		// Upper line
@@ -1132,13 +1000,12 @@
 		c.lineTo(w * 5 / 8, 0);
 		c.end();
 		c.stroke();
-		
+
 		// Circle
 		c.ellipse(0, h / 8, w, h * 7 / 8);
 		c.fillAndStroke();
 	};
-	UmlControlShape.prototype.paintForeground = function(c, x, y, w, h)
-	{
+	UmlControlShape.prototype.paintForeground = function (c, x, y, w, h) {
 		// Lower line
 		c.begin();
 		c.moveTo(w * 3 / 8, h / 8 * 1.1);
@@ -1151,37 +1018,30 @@
 	mxCellRenderer.prototype.defaultShapes['umlControl'] = UmlControlShape;
 
 	// UML Lifeline Shape
-	function UmlLifeline()
-	{
+	function UmlLifeline() {
 		mxRectangleShape.call(this);
 	};
 	mxUtils.extend(UmlLifeline, mxRectangleShape);
 	UmlLifeline.prototype.size = 40;
-	UmlLifeline.prototype.isHtmlAllowed = function()
-	{
+	UmlLifeline.prototype.isHtmlAllowed = function () {
 		return false;
 	};
-	UmlLifeline.prototype.getLabelBounds = function(rect)
-	{
+	UmlLifeline.prototype.getLabelBounds = function (rect) {
 		var size = Math.max(0, Math.min(rect.height, parseFloat(mxUtils.getValue(this.style, 'size', this.size)) * this.scale));
-		
+
 		return new mxRectangle(rect.x, rect.y, rect.width, size);
 	};
-	UmlLifeline.prototype.paintBackground = function(c, x, y, w, h)
-	{
+	UmlLifeline.prototype.paintBackground = function (c, x, y, w, h) {
 		var size = Math.max(0, Math.min(h, parseFloat(mxUtils.getValue(this.style, 'size', this.size))));
 		var participant = mxUtils.getValue(this.style, 'participant');
-		
-		if (participant == null || this.state == null)
-		{
+
+		if (participant == null || this.state == null) {
 			mxRectangleShape.prototype.paintBackground.call(this, c, x, y, w, size);
 		}
-		else
-		{
+		else {
 			var ctor = this.state.view.graph.cellRenderer.getShape(participant);
-			
-			if (ctor != null && ctor != UmlLifeline)
-			{
+
+			if (ctor != null && ctor != UmlLifeline) {
 				var shape = new ctor();
 				shape.apply(this.state);
 				c.save();
@@ -1189,9 +1049,8 @@
 				c.restore();
 			}
 		}
-		
-		if (size < h)
-		{
+
+		if (size < h) {
 			c.setDashed(true);
 			c.begin();
 			c.moveTo(x + w / 2, y + size);
@@ -1200,32 +1059,28 @@
 			c.stroke();
 		}
 	};
-	UmlLifeline.prototype.paintForeground = function(c, x, y, w, h)
-	{
+	UmlLifeline.prototype.paintForeground = function (c, x, y, w, h) {
 		var size = Math.max(0, Math.min(h, parseFloat(mxUtils.getValue(this.style, 'size', this.size))));
 		mxRectangleShape.prototype.paintForeground.call(this, c, x, y, w, Math.min(h, size));
 	};
 
 	mxCellRenderer.prototype.defaultShapes['umlLifeline'] = UmlLifeline;
-	
+
 	// UML Frame Shape
-	function UmlFrame()
-	{
+	function UmlFrame() {
 		mxShape.call(this);
 	};
 	mxUtils.extend(UmlFrame, mxShape);
 	UmlFrame.prototype.width = 60;
 	UmlFrame.prototype.height = 30;
 	UmlFrame.prototype.corner = 10;
-	UmlFrame.prototype.getLabelBounds = function(rect)
-	{
+	UmlFrame.prototype.getLabelBounds = function (rect) {
 		var w = Math.max(0, Math.min(rect.width, parseFloat(mxUtils.getValue(this.style, 'width', this.width)) * this.scale));
 		var h = Math.max(0, Math.min(rect.height, parseFloat(mxUtils.getValue(this.style, 'height', this.height)) * this.scale));
-		
+
 		return new mxRectangle(rect.x, rect.y, w, h);
 	};
-	UmlFrame.prototype.paintBackground = function(c, x, y, w, h)
-	{
+	UmlFrame.prototype.paintBackground = function (c, x, y, w, h) {
 		var co = this.corner;
 		var w0 = Math.min(w, Math.max(co, parseFloat(mxUtils.getValue(this.style, 'width', this.width))));
 		var h0 = Math.min(h, Math.max(co * 1.5, parseFloat(mxUtils.getValue(this.style, 'height', this.height))));
@@ -1238,7 +1093,7 @@
 		c.lineTo(x, y + h0);
 		c.close();
 		c.fillAndStroke();
-		
+
 		c.begin();
 		c.moveTo(x + w0, y);
 		c.lineTo(x + w, y);
@@ -1249,87 +1104,75 @@
 	};
 
 	mxCellRenderer.prototype.defaultShapes['umlFrame'] = UmlFrame;
-	
-	mxPerimeter.LifelinePerimeter = function (bounds, vertex, next, orthogonal)
-	{
+
+	mxPerimeter.LifelinePerimeter = function (bounds, vertex, next, orthogonal) {
 		var size = UmlLifeline.prototype.size;
-		
-		if (vertex != null)
-		{
+
+		if (vertex != null) {
 			size = mxUtils.getValue(vertex.style, 'size', size) * vertex.view.scale;
 		}
-		
+
 		var sw = (parseFloat(vertex.style[mxConstants.STYLE_STROKEWIDTH] || 1) * vertex.view.scale / 2) - 1;
 
-		if (next.x < bounds.getCenterX())
-		{
+		if (next.x < bounds.getCenterX()) {
 			sw += 1;
 			sw *= -1;
 		}
-		
+
 		return new mxPoint(bounds.getCenterX() + sw, Math.min(bounds.y + bounds.height,
-				Math.max(bounds.y + size, next.y)));
+			Math.max(bounds.y + size, next.y)));
 	};
-	
+
 	mxStyleRegistry.putValue('lifelinePerimeter', mxPerimeter.LifelinePerimeter);
-	
-	mxPerimeter.OrthogonalPerimeter = function (bounds, vertex, next, orthogonal)
-	{
+
+	mxPerimeter.OrthogonalPerimeter = function (bounds, vertex, next, orthogonal) {
 		orthogonal = true;
-		
+
 		return mxPerimeter.RectanglePerimeter.apply(this, arguments);
 	};
-	
+
 	mxStyleRegistry.putValue('orthogonalPerimeter', mxPerimeter.OrthogonalPerimeter);
 
-	mxPerimeter.BackbonePerimeter = function (bounds, vertex, next, orthogonal)
-	{
+	mxPerimeter.BackbonePerimeter = function (bounds, vertex, next, orthogonal) {
 		var sw = (parseFloat(vertex.style[mxConstants.STYLE_STROKEWIDTH] || 1) * vertex.view.scale / 2) - 1;
-		
-		if (vertex.style['backboneSize'] != null)
-		{
+
+		if (vertex.style['backboneSize'] != null) {
 			sw += (parseFloat(vertex.style['backboneSize']) * vertex.view.scale / 2) - 1;
 		}
-		
+
 		if (vertex.style[mxConstants.STYLE_DIRECTION] == 'south' ||
-			vertex.style[mxConstants.STYLE_DIRECTION] == 'north')
-		{
-			if (next.x < bounds.getCenterX())
-			{
+			vertex.style[mxConstants.STYLE_DIRECTION] == 'north') {
+			if (next.x < bounds.getCenterX()) {
 				sw += 1;
 				sw *= -1;
 			}
-			
+
 			return new mxPoint(bounds.getCenterX() + sw, Math.min(bounds.y + bounds.height,
-					Math.max(bounds.y, next.y)));
+				Math.max(bounds.y, next.y)));
 		}
-		else
-		{
-			if (next.y < bounds.getCenterY())
-			{
+		else {
+			if (next.y < bounds.getCenterY()) {
 				sw += 1;
 				sw *= -1;
 			}
-			
+
 			return new mxPoint(Math.min(bounds.x + bounds.width, Math.max(bounds.x, next.x)),
 				bounds.getCenterY() + sw);
 		}
 	};
-	
+
 	mxStyleRegistry.putValue('backbonePerimeter', mxPerimeter.BackbonePerimeter);
-	
+
 	// Lollipop Shape
-	function LollipopShape()
-	{
+	function LollipopShape() {
 		mxShape.call(this);
 	};
 	mxUtils.extend(LollipopShape, mxShape);
 	LollipopShape.prototype.size = 10;
-	LollipopShape.prototype.paintBackground = function(c, x, y, w, h)
-	{
+	LollipopShape.prototype.paintBackground = function (c, x, y, w, h) {
 		var sz = parseFloat(mxUtils.getValue(this.style, 'size', this.size));
 		c.translate(x, y);
-		
+
 		c.ellipse((w - sz) / 2, 0, sz, sz);
 		c.fillAndStroke();
 
@@ -1343,15 +1186,13 @@
 	mxCellRenderer.prototype.defaultShapes['lollipop'] = LollipopShape;
 
 	// Lollipop Shape
-	function RequiresShape()
-	{
+	function RequiresShape() {
 		mxShape.call(this);
 	};
 	mxUtils.extend(RequiresShape, mxShape);
 	RequiresShape.prototype.size = 10;
 	RequiresShape.prototype.inset = 2;
-	RequiresShape.prototype.paintBackground = function(c, x, y, w, h)
-	{
+	RequiresShape.prototype.paintBackground = function (c, x, y, w, h) {
 		var sz = parseFloat(mxUtils.getValue(this.style, 'size', this.size));
 		var inset = parseFloat(mxUtils.getValue(this.style, 'inset', this.inset)) + this.strokewidth;
 		c.translate(x, y);
@@ -1361,7 +1202,7 @@
 		c.lineTo(w / 2, h);
 		c.end();
 		c.stroke();
-		
+
 		c.begin();
 		c.moveTo((w - sz) / 2 - inset, sz / 2);
 		c.quadTo((w - sz) / 2 - inset, sz + inset, w / 2, sz + inset);
@@ -1371,17 +1212,15 @@
 	};
 
 	mxCellRenderer.prototype.defaultShapes['requires'] = RequiresShape;
-	
+
 	// Component shape
-	function ComponentShape()
-	{
+	function ComponentShape() {
 		mxCylinder.call(this);
 	};
 	mxUtils.extend(ComponentShape, mxCylinder);
 	ComponentShape.prototype.jettyWidth = 32;
 	ComponentShape.prototype.jettyHeight = 12;
-	ComponentShape.prototype.redrawPath = function(path, x, y, w, h, isForeground)
-	{
+	ComponentShape.prototype.redrawPath = function (path, x, y, w, h, isForeground) {
 		var dx = parseFloat(mxUtils.getValue(this.style, 'jettyWidth', this.jettyWidth));
 		var dy = parseFloat(mxUtils.getValue(this.style, 'jettyHeight', this.jettyHeight));
 		var x0 = dx / 2;
@@ -1389,8 +1228,7 @@
 		var y0 = 0.3 * h - dy / 2;
 		var y1 = 0.7 * h - dy / 2;
 
-		if (isForeground)
-		{
+		if (isForeground) {
 			path.moveTo(x0, y0);
 			path.lineTo(x1, y0);
 			path.lineTo(x1, y0 + dy);
@@ -1401,8 +1239,7 @@
 			path.lineTo(x0, y1 + dy);
 			path.end();
 		}
-		else
-		{
+		else {
 			path.moveTo(x0, 0);
 			path.lineTo(w, 0);
 			path.lineTo(w, h);
@@ -1421,65 +1258,56 @@
 	};
 
 	mxCellRenderer.prototype.defaultShapes['component'] = ComponentShape;
-	
+
 	// State Shapes derives from double ellipse
-	function StateShape()
-	{
+	function StateShape() {
 		mxDoubleEllipse.call(this);
 	};
 	mxUtils.extend(StateShape, mxDoubleEllipse);
 	StateShape.prototype.outerStroke = true;
-	StateShape.prototype.paintVertexShape = function(c, x, y, w, h)
-	{
+	StateShape.prototype.paintVertexShape = function (c, x, y, w, h) {
 		var inset = Math.min(4, Math.min(w / 5, h / 5));
-		
-		if (w > 0 && h > 0)
-		{
+
+		if (w > 0 && h > 0) {
 			c.ellipse(x + inset, y + inset, w - 2 * inset, h - 2 * inset);
 			c.fillAndStroke();
 		}
-		
+
 		c.setShadow(false);
 
-		if (this.outerStroke)
-		{
+		if (this.outerStroke) {
 			c.ellipse(x, y, w, h);
-			c.stroke();			
+			c.stroke();
 		}
 	};
 
 	mxCellRenderer.prototype.defaultShapes['endState'] = StateShape;
 
-	function StartStateShape()
-	{
+	function StartStateShape() {
 		StateShape.call(this);
 	};
 	mxUtils.extend(StartStateShape, StateShape);
 	StartStateShape.prototype.outerStroke = false;
-	
+
 	mxCellRenderer.prototype.defaultShapes['startState'] = StartStateShape;
 
 	// Link shape
-	function LinkShape()
-	{
+	function LinkShape() {
 		mxArrowConnector.call(this);
 		this.spacing = 0;
 	};
 	mxUtils.extend(LinkShape, mxArrowConnector);
 	LinkShape.prototype.defaultWidth = 4;
-	
-	LinkShape.prototype.isOpenEnded = function()
-	{
+
+	LinkShape.prototype.isOpenEnded = function () {
 		return true;
 	};
 
-	LinkShape.prototype.getEdgeWidth = function()
-	{
+	LinkShape.prototype.getEdgeWidth = function () {
 		return mxUtils.getNumber(this.style, 'width', this.defaultWidth) + Math.max(0, this.strokewidth - 1);
 	};
-	
-	LinkShape.prototype.isArrowRounded = function()
-	{
+
+	LinkShape.prototype.isArrowRounded = function () {
 		return this.isRounded;
 	};
 
@@ -1487,8 +1315,7 @@
 	mxCellRenderer.prototype.defaultShapes['link'] = LinkShape;
 
 	// Generic arrow
-	function FlexArrowShape()
-	{
+	function FlexArrowShape() {
 		mxArrowConnector.call(this);
 		this.spacing = 0;
 	};
@@ -1496,75 +1323,66 @@
 	FlexArrowShape.prototype.defaultWidth = 10;
 	FlexArrowShape.prototype.defaultArrowWidth = 20;
 
-	FlexArrowShape.prototype.getStartArrowWidth = function()
-	{
+	FlexArrowShape.prototype.getStartArrowWidth = function () {
 		return this.getEdgeWidth() + mxUtils.getNumber(this.style, 'startWidth', this.defaultArrowWidth);
 	};
 
-	FlexArrowShape.prototype.getEndArrowWidth = function()
-	{
+	FlexArrowShape.prototype.getEndArrowWidth = function () {
 		return this.getEdgeWidth() + mxUtils.getNumber(this.style, 'endWidth', this.defaultArrowWidth);;
 	};
 
-	FlexArrowShape.prototype.getEdgeWidth = function()
-	{
+	FlexArrowShape.prototype.getEdgeWidth = function () {
 		return mxUtils.getNumber(this.style, 'width', this.defaultWidth) + Math.max(0, this.strokewidth - 1);
 	};
-	
+
 	// Registers the link shape
 	mxCellRenderer.prototype.defaultShapes['flexArrow'] = FlexArrowShape;
-	
+
 	// Manual Input shape
-	function ManualInputShape()
-	{
+	function ManualInputShape() {
 		mxActor.call(this);
 	};
 	mxUtils.extend(ManualInputShape, mxActor);
 	ManualInputShape.prototype.size = 30;
-	ManualInputShape.prototype.redrawPath = function(c, x, y, w, h)
-	{
+	ManualInputShape.prototype.redrawPath = function (c, x, y, w, h) {
 		var s = Math.min(h, parseFloat(mxUtils.getValue(this.style, 'size', this.size)));
 		var arcSize = mxUtils.getValue(this.style, mxConstants.STYLE_ARCSIZE, mxConstants.LINE_ARCSIZE) / 2;
 		this.addPoints(c, [new mxPoint(0, h), new mxPoint(0, s), new mxPoint(w, 0), new mxPoint(w, h)],
-				this.isRounded, arcSize, true);
+			this.isRounded, arcSize, true);
 		c.end();
 	};
 
 	mxCellRenderer.prototype.defaultShapes['manualInput'] = ManualInputShape;
 
 	// Internal storage
-	function InternalStorageShape()
-	{
+	function InternalStorageShape() {
 		mxRectangleShape.call(this);
 	};
 	mxUtils.extend(InternalStorageShape, mxRectangleShape);
 	InternalStorageShape.prototype.dx = 20;
 	InternalStorageShape.prototype.dy = 20;
-	InternalStorageShape.prototype.isHtmlAllowed = function()
-	{
+	InternalStorageShape.prototype.isHtmlAllowed = function () {
 		return false;
 	};
-	InternalStorageShape.prototype.paintForeground = function(c, x, y, w, h)
-	{
+	InternalStorageShape.prototype.paintForeground = function (c, x, y, w, h) {
 		mxRectangleShape.prototype.paintForeground.apply(this, arguments);
 		var inset = 0;
-		
-		if (this.isRounded)
-		{
+
+		if (this.isRounded) {
 			var f = mxUtils.getValue(this.style, mxConstants.STYLE_ARCSIZE,
 				mxConstants.RECTANGLE_ROUNDING_FACTOR * 100) / 100;
 			inset = Math.max(inset, Math.min(w * f, h * f));
 		}
-		
+
 		var dx = Math.max(inset, Math.min(w, parseFloat(mxUtils.getValue(this.style, 'dx', this.dx))));
 		var dy = Math.max(inset, Math.min(h, parseFloat(mxUtils.getValue(this.style, 'dy', this.dy))));
-		
+
 		c.begin();
 		c.moveTo(x, y + dy);
 		c.lineTo(x + w, y + dy);
 		c.end();
 		c.stroke();
-		
+
 		c.begin();
 		c.moveTo(x + dx, y);
 		c.lineTo(x + dx, y + h);
@@ -1575,111 +1393,101 @@
 	mxCellRenderer.prototype.defaultShapes['internalStorage'] = InternalStorageShape;
 
 	// Internal storage
-	function CornerShape()
-	{
+	function CornerShape() {
 		mxActor.call(this);
 	};
 	mxUtils.extend(CornerShape, mxActor);
 	CornerShape.prototype.dx = 20;
 	CornerShape.prototype.dy = 20;
-	
+
 	// Corner
-	CornerShape.prototype.redrawPath = function(c, x, y, w, h)
-	{
+	CornerShape.prototype.redrawPath = function (c, x, y, w, h) {
 		var dx = Math.max(0, Math.min(w, parseFloat(mxUtils.getValue(this.style, 'dx', this.dx))));
 		var dy = Math.max(0, Math.min(h, parseFloat(mxUtils.getValue(this.style, 'dy', this.dy))));
-		
+
 		var s = Math.min(w / 2, Math.min(h, parseFloat(mxUtils.getValue(this.style, 'size', this.size))));
 		var arcSize = mxUtils.getValue(this.style, mxConstants.STYLE_ARCSIZE, mxConstants.LINE_ARCSIZE) / 2;
 		this.addPoints(c, [new mxPoint(0, 0), new mxPoint(w, 0), new mxPoint(w, dy), new mxPoint(dx, dy),
-		                   new mxPoint(dx, h), new mxPoint(0, h)], this.isRounded, arcSize, true);
+		new mxPoint(dx, h), new mxPoint(0, h)], this.isRounded, arcSize, true);
 		c.end();
 	};
 
 	mxCellRenderer.prototype.defaultShapes['corner'] = CornerShape;
 
 	// Internal storage
-	function TeeShape()
-	{
+	function TeeShape() {
 		mxActor.call(this);
 	};
 	mxUtils.extend(TeeShape, mxActor);
 	TeeShape.prototype.dx = 20;
 	TeeShape.prototype.dy = 20;
-	
+
 	// Corner
-	TeeShape.prototype.redrawPath = function(c, x, y, w, h)
-	{
+	TeeShape.prototype.redrawPath = function (c, x, y, w, h) {
 		var dx = Math.max(0, Math.min(w, parseFloat(mxUtils.getValue(this.style, 'dx', this.dx))));
 		var dy = Math.max(0, Math.min(h, parseFloat(mxUtils.getValue(this.style, 'dy', this.dy))));
 		var w2 = Math.abs(w - dx) / 2;
-		
+
 		var s = Math.min(w / 2, Math.min(h, parseFloat(mxUtils.getValue(this.style, 'size', this.size))));
 		var arcSize = mxUtils.getValue(this.style, mxConstants.STYLE_ARCSIZE, mxConstants.LINE_ARCSIZE) / 2;
 		this.addPoints(c, [new mxPoint(0, 0), new mxPoint(w, 0), new mxPoint(w, dy), new mxPoint((w + dx) / 2, dy),
-		                   new mxPoint((w + dx) / 2, h), new mxPoint((w - dx) / 2, h), new mxPoint((w - dx) / 2, dy),
-		                   new mxPoint(0, dy)], this.isRounded, arcSize, true);
+		new mxPoint((w + dx) / 2, h), new mxPoint((w - dx) / 2, h), new mxPoint((w - dx) / 2, dy),
+		new mxPoint(0, dy)], this.isRounded, arcSize, true);
 		c.end();
 	};
 
 	mxCellRenderer.prototype.defaultShapes['tee'] = TeeShape;
 
 	// Arrow
-	function SingleArrowShape()
-	{
+	function SingleArrowShape() {
 		mxActor.call(this);
 	};
 	mxUtils.extend(SingleArrowShape, mxActor);
 	SingleArrowShape.prototype.arrowWidth = 0.3;
 	SingleArrowShape.prototype.arrowSize = 0.2;
-	SingleArrowShape.prototype.redrawPath = function(c, x, y, w, h)
-	{
+	SingleArrowShape.prototype.redrawPath = function (c, x, y, w, h) {
 		var aw = h * Math.max(0, Math.min(1, parseFloat(mxUtils.getValue(this.style, 'arrowWidth', this.arrowWidth))));
 		var as = w * Math.max(0, Math.min(1, parseFloat(mxUtils.getValue(this.style, 'arrowSize', this.arrowSize))));
 		var at = (h - aw) / 2;
 		var ab = at + aw;
-		
+
 		var arcSize = mxUtils.getValue(this.style, mxConstants.STYLE_ARCSIZE, mxConstants.LINE_ARCSIZE) / 2;
 		this.addPoints(c, [new mxPoint(0, at), new mxPoint(w - as, at), new mxPoint(w - as, 0), new mxPoint(w, h / 2),
-		                   new mxPoint(w - as, h), new mxPoint(w - as, ab), new mxPoint(0, ab)],
-		                   this.isRounded, arcSize, true);
+		new mxPoint(w - as, h), new mxPoint(w - as, ab), new mxPoint(0, ab)],
+			this.isRounded, arcSize, true);
 		c.end();
 	};
 
 	mxCellRenderer.prototype.defaultShapes['singleArrow'] = SingleArrowShape;
 
 	// Arrow
-	function DoubleArrowShape()
-	{
+	function DoubleArrowShape() {
 		mxActor.call(this);
 	};
 	mxUtils.extend(DoubleArrowShape, mxActor);
-	DoubleArrowShape.prototype.redrawPath = function(c, x, y, w, h)
-	{
+	DoubleArrowShape.prototype.redrawPath = function (c, x, y, w, h) {
 		var aw = h * Math.max(0, Math.min(1, parseFloat(mxUtils.getValue(this.style, 'arrowWidth', SingleArrowShape.prototype.arrowWidth))));
 		var as = w * Math.max(0, Math.min(1, parseFloat(mxUtils.getValue(this.style, 'arrowSize', SingleArrowShape.prototype.arrowSize))));
 		var at = (h - aw) / 2;
 		var ab = at + aw;
-		
+
 		var arcSize = mxUtils.getValue(this.style, mxConstants.STYLE_ARCSIZE, mxConstants.LINE_ARCSIZE) / 2;
 		this.addPoints(c, [new mxPoint(0, h / 2), new mxPoint(as, 0), new mxPoint(as, at), new mxPoint(w - as, at),
-		                   new mxPoint(w - as, 0), new mxPoint(w, h / 2), new mxPoint(w - as, h),
-		                   new mxPoint(w - as, ab), new mxPoint(as, ab), new mxPoint(as, h)],
-		                   this.isRounded, arcSize, true);
+		new mxPoint(w - as, 0), new mxPoint(w, h / 2), new mxPoint(w - as, h),
+		new mxPoint(w - as, ab), new mxPoint(as, ab), new mxPoint(as, h)],
+			this.isRounded, arcSize, true);
 		c.end();
 	};
 
 	mxCellRenderer.prototype.defaultShapes['doubleArrow'] = DoubleArrowShape;
 
 	// Data storage
-	function DataStorageShape()
-	{
+	function DataStorageShape() {
 		mxActor.call(this);
 	};
 	mxUtils.extend(DataStorageShape, mxActor);
 	DataStorageShape.prototype.size = 0.1;
-	DataStorageShape.prototype.redrawPath = function(c, x, y, w, h)
-	{
+	DataStorageShape.prototype.redrawPath = function (c, x, y, w, h) {
 		var s = w * Math.max(0, Math.min(1, parseFloat(mxUtils.getValue(this.style, 'size', this.size))));
 
 		c.moveTo(s, 0);
@@ -1694,13 +1502,11 @@
 	mxCellRenderer.prototype.defaultShapes['dataStorage'] = DataStorageShape;
 
 	// Or
-	function OrShape()
-	{
+	function OrShape() {
 		mxActor.call(this);
 	};
 	mxUtils.extend(OrShape, mxActor);
-	OrShape.prototype.redrawPath = function(c, x, y, w, h)
-	{
+	OrShape.prototype.redrawPath = function (c, x, y, w, h) {
 		c.moveTo(0, 0);
 		c.quadTo(w, 0, w, h / 2);
 		c.quadTo(w, h, 0, h);
@@ -1711,13 +1517,11 @@
 	mxCellRenderer.prototype.defaultShapes['or'] = OrShape;
 
 	// Xor
-	function XorShape()
-	{
+	function XorShape() {
 		mxActor.call(this);
 	};
 	mxUtils.extend(XorShape, mxActor);
-	XorShape.prototype.redrawPath = function(c, x, y, w, h)
-	{
+	XorShape.prototype.redrawPath = function (c, x, y, w, h) {
 		c.moveTo(0, 0);
 		c.quadTo(w, 0, w, h / 2);
 		c.quadTo(w, h, 0, h);
@@ -1729,51 +1533,45 @@
 	mxCellRenderer.prototype.defaultShapes['xor'] = XorShape;
 
 	// Loop limit
-	function LoopLimitShape()
-	{
+	function LoopLimitShape() {
 		mxActor.call(this);
 	};
 	mxUtils.extend(LoopLimitShape, mxActor);
 	LoopLimitShape.prototype.size = 20;
-	LoopLimitShape.prototype.redrawPath = function(c, x, y, w, h)
-	{
+	LoopLimitShape.prototype.redrawPath = function (c, x, y, w, h) {
 		var s = Math.min(w / 2, Math.min(h, parseFloat(mxUtils.getValue(this.style, 'size', this.size))));
 		var arcSize = mxUtils.getValue(this.style, mxConstants.STYLE_ARCSIZE, mxConstants.LINE_ARCSIZE) / 2;
 		this.addPoints(c, [new mxPoint(s, 0), new mxPoint(w - s, 0), new mxPoint(w, s * 0.8), new mxPoint(w, h),
-		                   new mxPoint(0, h), new mxPoint(0, s * 0.8)], this.isRounded, arcSize, true);
+		new mxPoint(0, h), new mxPoint(0, s * 0.8)], this.isRounded, arcSize, true);
 		c.end();
 	};
 
 	mxCellRenderer.prototype.defaultShapes['loopLimit'] = LoopLimitShape;
 
 	// Off page connector
-	function OffPageConnectorShape()
-	{
+	function OffPageConnectorShape() {
 		mxActor.call(this);
 	};
 	mxUtils.extend(OffPageConnectorShape, mxActor);
 	OffPageConnectorShape.prototype.size = 3 / 8;
-	OffPageConnectorShape.prototype.redrawPath = function(c, x, y, w, h)
-	{
+	OffPageConnectorShape.prototype.redrawPath = function (c, x, y, w, h) {
 		var s = h * Math.max(0, Math.min(1, parseFloat(mxUtils.getValue(this.style, 'size', this.size))));
 		var arcSize = mxUtils.getValue(this.style, mxConstants.STYLE_ARCSIZE, mxConstants.LINE_ARCSIZE) / 2;
 		this.addPoints(c, [new mxPoint(0, 0), new mxPoint(w, 0), new mxPoint(w, h - s), new mxPoint(w / 2, h),
-		                   new mxPoint(0, h - s)], this.isRounded, arcSize, true);
+		new mxPoint(0, h - s)], this.isRounded, arcSize, true);
 		c.end();
 	};
 
 	mxCellRenderer.prototype.defaultShapes['offPageConnector'] = OffPageConnectorShape;
 
 	// Internal storage
-	function TapeDataShape()
-	{
+	function TapeDataShape() {
 		mxEllipse.call(this);
 	};
 	mxUtils.extend(TapeDataShape, mxEllipse);
-	TapeDataShape.prototype.paintVertexShape = function(c, x, y, w, h)
-	{
+	TapeDataShape.prototype.paintVertexShape = function (c, x, y, w, h) {
 		mxEllipse.prototype.paintVertexShape.apply(this, arguments);
-		
+
 		c.begin();
 		c.moveTo(x + w / 2, y + h);
 		c.lineTo(x + w, y + h);
@@ -1784,22 +1582,20 @@
 	mxCellRenderer.prototype.defaultShapes['tapeData'] = TapeDataShape;
 
 	// OrEllipseShape
-	function OrEllipseShape()
-	{
+	function OrEllipseShape() {
 		mxEllipse.call(this);
 	};
 	mxUtils.extend(OrEllipseShape, mxEllipse);
-	OrEllipseShape.prototype.paintVertexShape = function(c, x, y, w, h)
-	{
+	OrEllipseShape.prototype.paintVertexShape = function (c, x, y, w, h) {
 		mxEllipse.prototype.paintVertexShape.apply(this, arguments);
-		
+
 		c.setShadow(false);
 		c.begin();
 		c.moveTo(x, y + h / 2);
 		c.lineTo(x + w, y + h / 2);
 		c.end();
 		c.stroke();
-		
+
 		c.begin();
 		c.moveTo(x + w / 2, y);
 		c.lineTo(x + w / 2, y + h);
@@ -1810,23 +1606,21 @@
 	mxCellRenderer.prototype.defaultShapes['orEllipse'] = OrEllipseShape;
 
 	// SumEllipseShape
-	function SumEllipseShape()
-	{
+	function SumEllipseShape() {
 		mxEllipse.call(this);
 	};
 	mxUtils.extend(SumEllipseShape, mxEllipse);
-	SumEllipseShape.prototype.paintVertexShape = function(c, x, y, w, h)
-	{
+	SumEllipseShape.prototype.paintVertexShape = function (c, x, y, w, h) {
 		mxEllipse.prototype.paintVertexShape.apply(this, arguments);
 		var s2 = 0.145;
-		
+
 		c.setShadow(false);
 		c.begin();
 		c.moveTo(x + w * s2, y + h * s2);
 		c.lineTo(x + w * (1 - s2), y + h * (1 - s2));
 		c.end();
 		c.stroke();
-		
+
 		c.begin();
 		c.moveTo(x + w * (1 - s2), y + h * s2);
 		c.lineTo(x + w * s2, y + h * (1 - s2));
@@ -1837,15 +1631,13 @@
 	mxCellRenderer.prototype.defaultShapes['sumEllipse'] = SumEllipseShape;
 
 	// SortShape
-	function SortShape()
-	{
+	function SortShape() {
 		mxRhombus.call(this);
 	};
 	mxUtils.extend(SortShape, mxRhombus);
-	SortShape.prototype.paintVertexShape = function(c, x, y, w, h)
-	{
+	SortShape.prototype.paintVertexShape = function (c, x, y, w, h) {
 		mxRhombus.prototype.paintVertexShape.apply(this, arguments);
-		
+
 		c.setShadow(false);
 		c.begin();
 		c.moveTo(x, y + h / 2);
@@ -1857,20 +1649,18 @@
 	mxCellRenderer.prototype.defaultShapes['sortShape'] = SortShape;
 
 	// CollateShape
-	function CollateShape()
-	{
+	function CollateShape() {
 		mxEllipse.call(this);
 	};
 	mxUtils.extend(CollateShape, mxEllipse);
-	CollateShape.prototype.paintVertexShape = function(c, x, y, w, h)
-	{
+	CollateShape.prototype.paintVertexShape = function (c, x, y, w, h) {
 		c.begin();
 		c.moveTo(x, y);
 		c.lineTo(x + w, y);
 		c.lineTo(x + w / 2, y + h / 2);
 		c.close();
 		c.fillAndStroke();
-		
+
 		c.begin();
 		c.moveTo(x, y + h);
 		c.lineTo(x + w, y + h);
@@ -1882,17 +1672,15 @@
 	mxCellRenderer.prototype.defaultShapes['collate'] = CollateShape;
 
 	// DimensionShape
-	function DimensionShape()
-	{
+	function DimensionShape() {
 		mxEllipse.call(this);
 	};
 	mxUtils.extend(DimensionShape, mxEllipse);
-	DimensionShape.prototype.paintVertexShape = function(c, x, y, w, h)
-	{
+	DimensionShape.prototype.paintVertexShape = function (c, x, y, w, h) {
 		// Arrow size
 		var al = 10;
 		var cy = y + h - al / 2;
-		
+
 		c.begin();
 		c.moveTo(x, y);
 		c.lineTo(x, y + h);
@@ -1917,55 +1705,47 @@
 	mxCellRenderer.prototype.defaultShapes['dimension'] = DimensionShape;
 
 	// PartialRectangleShape
-	function PartialRectangleShape()
-	{
+	function PartialRectangleShape() {
 		mxEllipse.call(this);
 	};
 	mxUtils.extend(PartialRectangleShape, mxEllipse);
-	PartialRectangleShape.prototype.paintVertexShape = function(c, x, y, w, h)
-	{
-		if (!this.outline)
-		{
+	PartialRectangleShape.prototype.paintVertexShape = function (c, x, y, w, h) {
+		if (!this.outline) {
 			c.setStrokeColor(null);
 		}
 
 		mxRectangleShape.prototype.paintBackground.apply(this, arguments);
-		
-		if (this.style != null)
-		{
+
+		if (this.style != null) {
 			c.setStrokeColor(this.stroke);
 			c.rect(x, y, w, h);
 			c.fill();
-			
-			if (mxUtils.getValue(this.style, 'top', '1') == '1')
-			{
+
+			if (mxUtils.getValue(this.style, 'top', '1') == '1') {
 				c.begin();
 				c.moveTo(x, y);
 				c.lineTo(x + w, y);
 				c.end();
 				c.stroke();
 			}
-			
-			if (mxUtils.getValue(this.style, 'right', '1') == '1')
-			{
+
+			if (mxUtils.getValue(this.style, 'right', '1') == '1') {
 				c.begin();
 				c.moveTo(x + w, y);
 				c.lineTo(x + w, y + h);
 				c.end();
 				c.stroke();
 			}
-			
-			if (mxUtils.getValue(this.style, 'bottom', '1') == '1')
-			{
+
+			if (mxUtils.getValue(this.style, 'bottom', '1') == '1') {
 				c.begin();
 				c.moveTo(x + w, y + h);
 				c.lineTo(x, y + h);
 				c.end();
 				c.stroke();
 			}
-			
-			if (mxUtils.getValue(this.style, 'left', '1') == '1')
-			{
+
+			if (mxUtils.getValue(this.style, 'left', '1') == '1') {
 				c.begin();
 				c.moveTo(x, y + h);
 				c.lineTo(x, y);
@@ -1978,43 +1758,37 @@
 	mxCellRenderer.prototype.defaultShapes['partialRectangle'] = PartialRectangleShape;
 
 	// LineEllipseShape
-	function LineEllipseShape()
-	{
+	function LineEllipseShape() {
 		mxEllipse.call(this);
 	};
 	mxUtils.extend(LineEllipseShape, mxEllipse);
-	LineEllipseShape.prototype.paintVertexShape = function(c, x, y, w, h)
-	{
+	LineEllipseShape.prototype.paintVertexShape = function (c, x, y, w, h) {
 		mxEllipse.prototype.paintVertexShape.apply(this, arguments);
-		
+
 		c.setShadow(false);
 		c.begin();
-		
-		if (mxUtils.getValue(this.style, 'line') == 'vertical')
-		{
+
+		if (mxUtils.getValue(this.style, 'line') == 'vertical') {
 			c.moveTo(x + w / 2, y);
 			c.lineTo(x + w / 2, y + h);
 		}
-		else
-		{
+		else {
 			c.moveTo(x, y + h / 2);
 			c.lineTo(x + w, y + h / 2);
 		}
 
-		c.end();			
+		c.end();
 		c.stroke();
 	};
 
 	mxCellRenderer.prototype.defaultShapes['lineEllipse'] = LineEllipseShape;
 
 	// Delay
-	function DelayShape()
-	{
+	function DelayShape() {
 		mxActor.call(this);
 	};
 	mxUtils.extend(DelayShape, mxActor);
-	DelayShape.prototype.redrawPath = function(c, x, y, w, h)
-	{
+	DelayShape.prototype.redrawPath = function (c, x, y, w, h) {
 		var dx = Math.min(w, h / 2);
 		c.moveTo(0, 0);
 		c.lineTo(w - dx, 0);
@@ -2028,21 +1802,19 @@
 	mxCellRenderer.prototype.defaultShapes['delay'] = DelayShape;
 
 	// Cross Shape
-	function CrossShape()
-	{
+	function CrossShape() {
 		mxActor.call(this);
 	};
 	mxUtils.extend(CrossShape, mxActor);
 	CrossShape.prototype.size = 0.2;
-	CrossShape.prototype.redrawPath = function(c, x, y, w, h)
-	{
+	CrossShape.prototype.redrawPath = function (c, x, y, w, h) {
 		var m = Math.min(h, w);
 		var size = Math.max(0, Math.min(m, m * parseFloat(mxUtils.getValue(this.style, 'size', this.size))));
 		var t = (h - size) / 2;
 		var b = t + size;
 		var l = (w - size) / 2;
 		var r = l + size;
-		
+
 		c.moveTo(0, t);
 		c.lineTo(l, t);
 		c.lineTo(l, 0);
@@ -2062,17 +1834,15 @@
 	mxCellRenderer.prototype.defaultShapes['cross'] = CrossShape;
 
 	// Display
-	function DisplayShape()
-	{
+	function DisplayShape() {
 		mxActor.call(this);
 	};
 	mxUtils.extend(DisplayShape, mxActor);
 	DisplayShape.prototype.size = 0.25;
-	DisplayShape.prototype.redrawPath = function(c, x, y, w, h)
-	{
+	DisplayShape.prototype.redrawPath = function (c, x, y, w, h) {
 		var dx = Math.min(w, h / 2);
 		var s = Math.min(w - dx, Math.max(0, parseFloat(mxUtils.getValue(this.style, 'size', this.size))) * w);
-		
+
 		c.moveTo(0, h / 2);
 		c.lineTo(s, 0);
 		c.lineTo(w - dx, 0);
@@ -2086,13 +1856,11 @@
 	mxCellRenderer.prototype.defaultShapes['display'] = DisplayShape;
 
 	// Registers and defines the custom marker
-	mxMarker.addMarker('dash', function(c, shape, type, pe, unitX, unitY, size, source, sw, filled)
-	{
+	mxMarker.addMarker('dash', function (c, shape, type, pe, unitX, unitY, size, source, sw, filled) {
 		var nx = unitX * (size + sw + 1);
 		var ny = unitY * (size + sw + 1);
 
-		return function()
-		{
+		return function () {
 			c.begin();
 			c.moveTo(pe.x - nx / 2 - ny / 2, pe.y - ny / 2 + nx / 2);
 			c.lineTo(pe.x + ny / 2 - 3 * nx / 2, pe.y - 3 * ny / 2 - nx / 2);
@@ -2101,13 +1869,11 @@
 	});
 
 	// Registers and defines the custom marker
-	mxMarker.addMarker('cross', function(c, shape, type, pe, unitX, unitY, size, source, sw, filled)
-	{
+	mxMarker.addMarker('cross', function (c, shape, type, pe, unitX, unitY, size, source, sw, filled) {
 		var nx = unitX * (size + sw + 1);
 		var ny = unitY * (size + sw + 1);
 
-		return function()
-		{
+		return function () {
 			c.begin();
 			c.moveTo(pe.x - nx / 2 - ny / 2, pe.y - ny / 2 + nx / 2);
 			c.lineTo(pe.x + ny / 2 - 3 * nx / 2, pe.y - 3 * ny / 2 - nx / 2);
@@ -2116,45 +1882,39 @@
 			c.stroke();
 		};
 	});
-	
-	function circleMarker(c, shape, type, pe, unitX, unitY, size, source, sw, filled)
-	{
+
+	function circleMarker(c, shape, type, pe, unitX, unitY, size, source, sw, filled) {
 		var a = size / 2;
 		var size = size + sw;
 
 		var pt = pe.clone();
-		
+
 		pe.x -= unitX * (2 * size + sw);
 		pe.y -= unitY * (2 * size + sw);
-		
+
 		unitX = unitX * (size + sw);
 		unitY = unitY * (size + sw);
 
-		return function()
-		{
+		return function () {
 			c.ellipse(pt.x - unitX - size, pt.y - unitY - size, 2 * size, 2 * size);
-			
-			if (filled)
-			{
+
+			if (filled) {
 				c.fillAndStroke();
 			}
-			else
-			{
+			else {
 				c.stroke();
 			}
 		};
 	};
-	
+
 	mxMarker.addMarker('circle', circleMarker);
-	mxMarker.addMarker('circlePlus', function(c, shape, type, pe, unitX, unitY, size, source, sw, filled)
-	{
+	mxMarker.addMarker('circlePlus', function (c, shape, type, pe, unitX, unitY, size, source, sw, filled) {
 		var pt = pe.clone();
 		var fn = circleMarker.apply(this, arguments);
 		var nx = unitX * (size + 2 * sw); // (size + sw + 1);
 		var ny = unitY * (size + 2 * sw); //(size + sw + 1);
 
-		return function()
-		{
+		return function () {
 			fn.apply(this, arguments);
 
 			c.begin();
@@ -2165,142 +1925,122 @@
 			c.stroke();
 		};
 	});
-	
-	mxMarker.addMarker('async', function(c, shape, type, pe, unitX, unitY, size, source, sw, filled)
-	{
+
+	mxMarker.addMarker('async', function (c, shape, type, pe, unitX, unitY, size, source, sw, filled) {
 		// The angle of the forward facing arrow sides against the x axis is
 		// 26.565 degrees, 1/sin(26.565) = 2.236 / 2 = 1.118 ( / 2 allows for
 		// only half the strokewidth is processed ).
 		var endOffsetX = unitX * sw * 1.118;
 		var endOffsetY = unitY * sw * 1.118;
-		
+
 		unitX = unitX * (size + sw);
 		unitY = unitY * (size + sw);
 
 		var pt = pe.clone();
 		pt.x -= endOffsetX;
 		pt.y -= endOffsetY;
-		
+
 		var f = 1;
 		pe.x += -unitX * f - endOffsetX;
 		pe.y += -unitY * f - endOffsetY;
-		
-		return function()
-		{
+
+		return function () {
 			c.begin();
 			c.moveTo(pt.x, pt.y);
-			
-			if (source)
-			{
+
+			if (source) {
 				c.lineTo(pt.x - unitX - unitY / 2, pt.y - unitY + unitX / 2);
 			}
-			else
-			{
+			else {
 				c.lineTo(pt.x + unitY / 2 - unitX, pt.y - unitY - unitX / 2);
 			}
-			
+
 			c.lineTo(pt.x - unitX, pt.y - unitY);
 			c.close();
 
-			if (filled)
-			{
+			if (filled) {
 				c.fillAndStroke();
 			}
-			else
-			{
+			else {
 				c.stroke();
 			}
 		};
 	});
-	
-	function createOpenAsyncArrow(widthFactor)
-	{
+
+	function createOpenAsyncArrow(widthFactor) {
 		widthFactor = (widthFactor != null) ? widthFactor : 2;
-		
-		return function(c, shape, type, pe, unitX, unitY, size, source, sw, filled)
-		{
+
+		return function (c, shape, type, pe, unitX, unitY, size, source, sw, filled) {
 			unitX = unitX * (size + sw);
 			unitY = unitY * (size + sw);
-			
+
 			var pt = pe.clone();
 
-			return function()
-			{
+			return function () {
 				c.begin();
 				c.moveTo(pt.x, pt.y);
-				
-				if (source)
-				{
+
+				if (source) {
 					c.lineTo(pt.x - unitX - unitY / widthFactor, pt.y - unitY + unitX / widthFactor);
 				}
-				else
-				{
+				else {
 					c.lineTo(pt.x + unitY / widthFactor - unitX, pt.y - unitY - unitX / widthFactor);
 				}
-				
+
 				c.stroke();
 			};
 		}
 	};
-	
+
 	mxMarker.addMarker('openAsync', createOpenAsyncArrow(2));
-	
-	function arrow(canvas, shape, type, pe, unitX, unitY, size, source, sw, filled)
-	{
+
+	function arrow(canvas, shape, type, pe, unitX, unitY, size, source, sw, filled) {
 		// The angle of the forward facing arrow sides against the x axis is
 		// 26.565 degrees, 1/sin(26.565) = 2.236 / 2 = 1.118 ( / 2 allows for
 		// only half the strokewidth is processed ).
 		var endOffsetX = unitX * sw * 1.118;
 		var endOffsetY = unitY * sw * 1.118;
-		
+
 		unitX = unitX * (size + sw);
 		unitY = unitY * (size + sw);
 
 		var pt = pe.clone();
 		pt.x -= endOffsetX;
 		pt.y -= endOffsetY;
-		
+
 		var f = (type != mxConstants.ARROW_CLASSIC && type != mxConstants.ARROW_CLASSIC_THIN) ? 1 : 3 / 4;
 		pe.x += -unitX * f - endOffsetX;
 		pe.y += -unitY * f - endOffsetY;
-		
-		return function()
-		{
+
+		return function () {
 			canvas.begin();
 			canvas.moveTo(pt.x, pt.y);
 			canvas.lineTo(pt.x - unitX - unitY / widthFactor, pt.y - unitY + unitX / widthFactor);
-		
-			if (type == mxConstants.ARROW_CLASSIC || type == mxConstants.ARROW_CLASSIC_THIN)
-			{
+
+			if (type == mxConstants.ARROW_CLASSIC || type == mxConstants.ARROW_CLASSIC_THIN) {
 				canvas.lineTo(pt.x - unitX * 3 / 4, pt.y - unitY * 3 / 4);
 			}
-		
+
 			canvas.lineTo(pt.x + unitY / widthFactor - unitX, pt.y - unitY - unitX / widthFactor);
 			canvas.close();
 
-			if (filled)
-			{
+			if (filled) {
 				canvas.fillAndStroke();
 			}
-			else
-			{
+			else {
 				canvas.stroke();
 			}
 		};
 	}
-	
-	
+
+
 	// Handlers are only added if mxVertexHandler is defined (ie. not in embedded graph)
-	if (typeof mxVertexHandler !== 'undefined')
-	{
-		function createHandle(state, keys, getPositionFn, setPositionFn, ignoreGrid)
-		{
+	if (typeof mxVertexHandler !== 'undefined') {
+		function createHandle(state, keys, getPositionFn, setPositionFn, ignoreGrid) {
 			var handle = new mxHandle(state, null, mxVertexHandler.prototype.secondaryHandleImage);
-			
-			handle.execute = function()
-			{
-				for (var i = 0; i < keys.length; i++)
-				{	
+
+			handle.execute = function () {
+				for (var i = 0; i < keys.length; i++) {
 					this.copyStyle(keys[i]);
 				}
 			};
@@ -2308,156 +2048,128 @@
 			handle.getPosition = getPositionFn;
 			handle.setPosition = setPositionFn;
 			handle.ignoreGrid = (ignoreGrid != null) ? ignoreGrid : true;
-			
+
 			return handle;
 		};
-		
-		function createArcHandle(state, yOffset)
-		{
-			return createHandle(state, [mxConstants.STYLE_ARCSIZE], function(bounds)
-			{
+
+		function createArcHandle(state, yOffset) {
+			return createHandle(state, [mxConstants.STYLE_ARCSIZE], function (bounds) {
 				var arcSize = Math.max(0, parseFloat(mxUtils.getValue(state.style,
 					mxConstants.STYLE_ARCSIZE, mxConstants.RECTANGLE_ROUNDING_FACTOR * 100))) / 100;
 				var tmp = (yOffset != null) ? yOffset : bounds.height / 8;
-				
+
 				return new mxPoint(bounds.x + bounds.width - Math.min(Math.max(bounds.width / 2, bounds.height / 2),
 					Math.min(bounds.width, bounds.height) * arcSize), bounds.y + tmp);
-			}, function(bounds, pt, me)
-			{
+			}, function (bounds, pt, me) {
 				var f = Math.min(50, Math.max(0, (bounds.width - pt.x + bounds.x) * 100 /
 					Math.min(bounds.width, bounds.height)));
 				this.state.style[mxConstants.STYLE_ARCSIZE] = Math.round(f);
 			});
 		}
 
-		function createArcHandleFunction()
-		{
-			return function(state)
-			{
+		function createArcHandleFunction() {
+			return function (state) {
 				var handles = [];
-				
-				if (mxUtils.getValue(state.style, mxConstants.STYLE_ROUNDED, false))
-				{
+
+				if (mxUtils.getValue(state.style, mxConstants.STYLE_ROUNDED, false)) {
 					handles.push(createArcHandle(state));
 				}
-				
+
 				return handles;
 			};
 		};
-		
-		function createTrapezoidHandleFunction(max)
-		{
-			return function(state)
-			{
-				var handles = [createHandle(state, ['size'], function(bounds)
-				{
+
+		function createTrapezoidHandleFunction(max) {
+			return function (state) {
+				var handles = [createHandle(state, ['size'], function (bounds) {
 					var size = Math.max(0, Math.min(max, parseFloat(mxUtils.getValue(this.state.style, 'size', TrapezoidShape.prototype.size))));
-				
+
 					return new mxPoint(bounds.x + size * bounds.width * 0.75, bounds.y + bounds.height / 4);
-				}, function(bounds, pt)
-				{
+				}, function (bounds, pt) {
 					this.state.style['size'] = Math.max(0, Math.min(max, (pt.x - bounds.x) / (bounds.width * 0.75)));
 				})];
-				
-				if (mxUtils.getValue(state.style, mxConstants.STYLE_ROUNDED, false))
-				{
+
+				if (mxUtils.getValue(state.style, mxConstants.STYLE_ROUNDED, false)) {
 					handles.push(createArcHandle(state));
 				}
-				
+
 				return handles;
 			};
 		};
-		
-		function createDisplayHandleFunction(defaultValue, allowArcHandle, max)
-		{
+
+		function createDisplayHandleFunction(defaultValue, allowArcHandle, max) {
 			max = (max != null) ? max : 1;
-			
-			return function(state)
-			{
-				var handles = [createHandle(state, ['size'], function(bounds)
-				{
+
+			return function (state) {
+				var handles = [createHandle(state, ['size'], function (bounds) {
 					var size = parseFloat(mxUtils.getValue(this.state.style, 'size', defaultValue));
-	
+
 					return new mxPoint(bounds.x + size * bounds.width, bounds.getCenterY());
-				}, function(bounds, pt)
-				{
+				}, function (bounds, pt) {
 					this.state.style['size'] = Math.max(0, Math.min(max, (pt.x - bounds.x) / bounds.width));
 				})];
-				
-				if (allowArcHandle && mxUtils.getValue(state.style, mxConstants.STYLE_ROUNDED, false))
-				{
+
+				if (allowArcHandle && mxUtils.getValue(state.style, mxConstants.STYLE_ROUNDED, false)) {
 					handles.push(createArcHandle(state));
 				}
-				
+
 				return handles;
 			};
 		};
-		
-		function createCubeHandleFunction(factor, defaultValue, allowArcHandle)
-		{
-			return function(state)
-			{
-				var handles = [createHandle(state, ['size'], function(bounds)
-				{
+
+		function createCubeHandleFunction(factor, defaultValue, allowArcHandle) {
+			return function (state) {
+				var handles = [createHandle(state, ['size'], function (bounds) {
 					var size = Math.max(0, Math.min(bounds.width, Math.min(bounds.height, parseFloat(
 						mxUtils.getValue(this.state.style, 'size', defaultValue))))) * factor;
-					
+
 					return new mxPoint(bounds.x + size, bounds.y + size);
-				}, function(bounds, pt)
-				{
+				}, function (bounds, pt) {
 					this.state.style['size'] = Math.round(Math.max(0, Math.min(Math.min(bounds.width, pt.x - bounds.x),
-							Math.min(bounds.height, pt.y - bounds.y))) / factor);
+						Math.min(bounds.height, pt.y - bounds.y))) / factor);
 				})];
-				
-				if (allowArcHandle && mxUtils.getValue(state.style, mxConstants.STYLE_ROUNDED, false))
-				{
+
+				if (allowArcHandle && mxUtils.getValue(state.style, mxConstants.STYLE_ROUNDED, false)) {
 					handles.push(createArcHandle(state));
 				}
-				
+
 				return handles;
 			};
 		};
-		
-		function createArrowHandleFunction(maxSize)
-		{
-			return function(state)
-			{
-				return [createHandle(state, ['arrowWidth', 'arrowSize'], function(bounds)
-				{
+
+		function createArrowHandleFunction(maxSize) {
+			return function (state) {
+				return [createHandle(state, ['arrowWidth', 'arrowSize'], function (bounds) {
 					var aw = Math.max(0, Math.min(1, mxUtils.getValue(this.state.style, 'arrowWidth', SingleArrowShape.prototype.arrowWidth)));
 					var as = Math.max(0, Math.min(maxSize, mxUtils.getValue(this.state.style, 'arrowSize', SingleArrowShape.prototype.arrowSize)));
-					
+
 					return new mxPoint(bounds.x + (1 - as) * bounds.width, bounds.y + (1 - aw) * bounds.height / 2);
-				}, function(bounds, pt)
-				{
+				}, function (bounds, pt) {
 					this.state.style['arrowWidth'] = Math.max(0, Math.min(1, Math.abs(bounds.y + bounds.height / 2 - pt.y) / bounds.height * 2));
 					this.state.style['arrowSize'] = Math.max(0, Math.min(maxSize, (bounds.x + bounds.width - pt.x) / (bounds.width)));
 				})];
 			};
 		};
-		
-		function createEdgeHandle(state, keys, start, getPosition, setPosition)
-		{
+
+		function createEdgeHandle(state, keys, start, getPosition, setPosition) {
 			var pts = state.absolutePoints;
 			var n = pts.length - 1;
-			
+
 			var tr = state.view.translate;
 			var s = state.view.scale;
-			
+
 			var p0 = (start) ? pts[0] : pts[n];
 			var p1 = (start) ? pts[1] : pts[n - 1];
 			var dx = (start) ? p1.x - p0.x : p1.x - p0.x;
 			var dy = (start) ? p1.y - p0.y : p1.y - p0.y;
 
 			var dist = Math.sqrt(dx * dx + dy * dy);
-			
-			return createHandle(state, keys, function(bounds)
-			{
+
+			return createHandle(state, keys, function (bounds) {
 				var pt = getPosition.call(this, dist, dx / dist, dy / dist, p0, p1);
-				
+
 				return new mxPoint(pt.x / s - tr.x, pt.y / s - tr.y);
-			}, function(bounds, pt, me)
-			{
+			}, function (bounds, pt, me) {
 				var dist = Math.sqrt(dx * dx + dy * dy);
 				pt.x = (pt.x + tr.x) * s;
 				pt.y = (pt.y + tr.y) * s;
@@ -2465,211 +2177,175 @@
 				setPosition.call(this, dist, dx / dist, dy / dist, p0, p1, pt, me);
 			});
 		};
-		
-		function createEdgeWidthHandle(state, start, spacing)
-		{
-			return createEdgeHandle(state, ['width'], start, function(dist, nx, ny, p0, p1)
-			{
+
+		function createEdgeWidthHandle(state, start, spacing) {
+			return createEdgeHandle(state, ['width'], start, function (dist, nx, ny, p0, p1) {
 				var w = state.shape.getEdgeWidth() * state.view.scale + spacing;
 
 				return new mxPoint(p0.x + nx * dist / 4 + ny * w / 2, p0.y + ny * dist / 4 - nx * w / 2);
-			}, function(dist, nx, ny, p0, p1, pt)
-			{
-				var w = Math.sqrt(mxUtils.ptSegDistSq(p0.x, p0.y, p1.x, p1.y, pt.x, pt.y));					
+			}, function (dist, nx, ny, p0, p1, pt) {
+				var w = Math.sqrt(mxUtils.ptSegDistSq(p0.x, p0.y, p1.x, p1.y, pt.x, pt.y));
 				state.style['width'] = Math.round(w * 2) / state.view.scale - spacing;
 			});
 		};
-		
-		function ptLineDistance(x1, y1, x2, y2, x0, y0)
-		{
+
+		function ptLineDistance(x1, y1, x2, y2, x0, y0) {
 			return Math.abs((y2 - y1) * x0 - (x2 - x1) * y0 + x2 * y1 - y2 * x1) / Math.sqrt((y2 - y1) * (y2 - y1) + (x2 - x1) * (x2 - x1));
 		}
 
 		var handleFactory = {
-			'link': function(state)
-			{
+			'link': function (state) {
 				var spacing = 10;
 
 				return [createEdgeWidthHandle(state, true, spacing), createEdgeWidthHandle(state, false, spacing)];
 			},
-			'flexArrow': function(state)
-			{
+			'flexArrow': function (state) {
 				// Do not use state.shape.startSize/endSize since it is cached
 				var tol = state.view.graph.gridSize / state.view.scale;
 				var handles = [];
-				
-				if (mxUtils.getValue(state.style, mxConstants.STYLE_STARTARROW, mxConstants.NONE) != mxConstants.NONE)
-				{
-					handles.push(createEdgeHandle(state, ['width', mxConstants.STYLE_STARTSIZE, mxConstants.STYLE_ENDSIZE], true, function(dist, nx, ny, p0, p1)
-					{
+
+				if (mxUtils.getValue(state.style, mxConstants.STYLE_STARTARROW, mxConstants.NONE) != mxConstants.NONE) {
+					handles.push(createEdgeHandle(state, ['width', mxConstants.STYLE_STARTSIZE, mxConstants.STYLE_ENDSIZE], true, function (dist, nx, ny, p0, p1) {
 						var w = (state.shape.getEdgeWidth() - state.shape.strokewidth) * state.view.scale;
 						var l = mxUtils.getNumber(state.style, mxConstants.STYLE_STARTSIZE, mxConstants.ARROW_SIZE / 5) * 3 * state.view.scale;
-						
+
 						return new mxPoint(p0.x + nx * (l + state.shape.strokewidth * state.view.scale) + ny * w / 2,
 							p0.y + ny * (l + state.shape.strokewidth * state.view.scale) - nx * w / 2);
-					}, function(dist, nx, ny, p0, p1, pt, me)
-					{
+					}, function (dist, nx, ny, p0, p1, pt, me) {
 						var w = Math.sqrt(mxUtils.ptSegDistSq(p0.x, p0.y, p1.x, p1.y, pt.x, pt.y));
 						var l = mxUtils.ptLineDist(p0.x, p0.y, p0.x + ny, p0.y - nx, pt.x, pt.y);
-						
+
 						state.style[mxConstants.STYLE_STARTSIZE] = Math.round((l - state.shape.strokewidth) * 100 / 3) / 100 / state.view.scale;
 						state.style['width'] = Math.round(w * 2) / state.view.scale;
-						
+
 						// Applies to opposite side
-						if (mxEvent.isControlDown(me.getEvent()))
-						{
+						if (mxEvent.isControlDown(me.getEvent())) {
 							state.style[mxConstants.STYLE_ENDSIZE] = state.style[mxConstants.STYLE_STARTSIZE];
 						}
 
 						// Snaps to end geometry
-						if (!mxEvent.isAltDown(me.getEvent()))
-						{
-							if (Math.abs(parseFloat(state.style[mxConstants.STYLE_STARTSIZE]) - parseFloat(state.style[mxConstants.STYLE_ENDSIZE])) < tol / 6)
-							{
+						if (!mxEvent.isAltDown(me.getEvent())) {
+							if (Math.abs(parseFloat(state.style[mxConstants.STYLE_STARTSIZE]) - parseFloat(state.style[mxConstants.STYLE_ENDSIZE])) < tol / 6) {
 								state.style[mxConstants.STYLE_STARTSIZE] = state.style[mxConstants.STYLE_ENDSIZE];
 							}
 						}
 					}));
-					
-					handles.push(createEdgeHandle(state, ['startWidth', 'endWidth', mxConstants.STYLE_STARTSIZE, mxConstants.STYLE_ENDSIZE], true, function(dist, nx, ny, p0, p1)
-					{
+
+					handles.push(createEdgeHandle(state, ['startWidth', 'endWidth', mxConstants.STYLE_STARTSIZE, mxConstants.STYLE_ENDSIZE], true, function (dist, nx, ny, p0, p1) {
 						var w = (state.shape.getStartArrowWidth() - state.shape.strokewidth) * state.view.scale;
 						var l = mxUtils.getNumber(state.style, mxConstants.STYLE_STARTSIZE, mxConstants.ARROW_SIZE / 5) * 3 * state.view.scale;
-						
+
 						return new mxPoint(p0.x + nx * (l + state.shape.strokewidth * state.view.scale) + ny * w / 2,
 							p0.y + ny * (l + state.shape.strokewidth * state.view.scale) - nx * w / 2);
-					}, function(dist, nx, ny, p0, p1, pt, me)
-					{
+					}, function (dist, nx, ny, p0, p1, pt, me) {
 						var w = Math.sqrt(mxUtils.ptSegDistSq(p0.x, p0.y, p1.x, p1.y, pt.x, pt.y));
 						var l = mxUtils.ptLineDist(p0.x, p0.y, p0.x + ny, p0.y - nx, pt.x, pt.y);
-						
+
 						state.style[mxConstants.STYLE_STARTSIZE] = Math.round((l - state.shape.strokewidth) * 100 / 3) / 100 / state.view.scale;
 						state.style['startWidth'] = Math.max(0, Math.round(w * 2) - state.shape.getEdgeWidth()) / state.view.scale;
-						
+
 						// Applies to opposite side
-						if (mxEvent.isControlDown(me.getEvent()))
-						{
+						if (mxEvent.isControlDown(me.getEvent())) {
 							state.style[mxConstants.STYLE_ENDSIZE] = state.style[mxConstants.STYLE_STARTSIZE];
 							state.style['endWidth'] = state.style['startWidth'];
 						}
-						
+
 						// Snaps to endWidth
-						if (!mxEvent.isAltDown(me.getEvent()))
-						{
-							if (Math.abs(parseFloat(state.style[mxConstants.STYLE_STARTSIZE]) - parseFloat(state.style[mxConstants.STYLE_ENDSIZE])) < tol / 6)
-							{
+						if (!mxEvent.isAltDown(me.getEvent())) {
+							if (Math.abs(parseFloat(state.style[mxConstants.STYLE_STARTSIZE]) - parseFloat(state.style[mxConstants.STYLE_ENDSIZE])) < tol / 6) {
 								state.style[mxConstants.STYLE_STARTSIZE] = state.style[mxConstants.STYLE_ENDSIZE];
 							}
-							
-							if (Math.abs(parseFloat(state.style['startWidth']) - parseFloat(state.style['endWidth'])) < tol)
-							{
+
+							if (Math.abs(parseFloat(state.style['startWidth']) - parseFloat(state.style['endWidth'])) < tol) {
 								state.style['startWidth'] = state.style['endWidth'];
 							}
 						}
 					}));
 				}
-				
-				if (mxUtils.getValue(state.style, mxConstants.STYLE_ENDARROW, mxConstants.NONE) != mxConstants.NONE)
-				{
-					handles.push(createEdgeHandle(state, ['width', mxConstants.STYLE_STARTSIZE, mxConstants.STYLE_ENDSIZE], false, function(dist, nx, ny, p0, p1)
-					{
+
+				if (mxUtils.getValue(state.style, mxConstants.STYLE_ENDARROW, mxConstants.NONE) != mxConstants.NONE) {
+					handles.push(createEdgeHandle(state, ['width', mxConstants.STYLE_STARTSIZE, mxConstants.STYLE_ENDSIZE], false, function (dist, nx, ny, p0, p1) {
 						var w = (state.shape.getEdgeWidth() - state.shape.strokewidth) * state.view.scale;
 						var l = mxUtils.getNumber(state.style, mxConstants.STYLE_ENDSIZE, mxConstants.ARROW_SIZE / 5) * 3 * state.view.scale;
-						
+
 						return new mxPoint(p0.x + nx * (l + state.shape.strokewidth * state.view.scale) - ny * w / 2,
 							p0.y + ny * (l + state.shape.strokewidth * state.view.scale) + nx * w / 2);
-					}, function(dist, nx, ny, p0, p1, pt, me)
-					{
+					}, function (dist, nx, ny, p0, p1, pt, me) {
 						var w = Math.sqrt(mxUtils.ptSegDistSq(p0.x, p0.y, p1.x, p1.y, pt.x, pt.y));
 						var l = mxUtils.ptLineDist(p0.x, p0.y, p0.x + ny, p0.y - nx, pt.x, pt.y);
-						
+
 						state.style[mxConstants.STYLE_ENDSIZE] = Math.round((l - state.shape.strokewidth) * 100 / 3) / 100 / state.view.scale;
 						state.style['width'] = Math.round(w * 2) / state.view.scale;
-						
+
 						// Applies to opposite side
-						if (mxEvent.isControlDown(me.getEvent()))
-						{
+						if (mxEvent.isControlDown(me.getEvent())) {
 							state.style[mxConstants.STYLE_STARTSIZE] = state.style[mxConstants.STYLE_ENDSIZE];
 						}
-					
+
 						// Snaps to start geometry
-						if (!mxEvent.isAltDown(me.getEvent()))
-						{
-							if (Math.abs(parseFloat(state.style[mxConstants.STYLE_ENDSIZE]) - parseFloat(state.style[mxConstants.STYLE_STARTSIZE])) < tol / 6)
-							{
+						if (!mxEvent.isAltDown(me.getEvent())) {
+							if (Math.abs(parseFloat(state.style[mxConstants.STYLE_ENDSIZE]) - parseFloat(state.style[mxConstants.STYLE_STARTSIZE])) < tol / 6) {
 								state.style[mxConstants.STYLE_ENDSIZE] = state.style[mxConstants.STYLE_STARTSIZE];
 							}
 						}
 					}));
-					
-					handles.push(createEdgeHandle(state, ['startWidth', 'endWidth', mxConstants.STYLE_STARTSIZE, mxConstants.STYLE_ENDSIZE], false, function(dist, nx, ny, p0, p1)
-					{
+
+					handles.push(createEdgeHandle(state, ['startWidth', 'endWidth', mxConstants.STYLE_STARTSIZE, mxConstants.STYLE_ENDSIZE], false, function (dist, nx, ny, p0, p1) {
 						var w = (state.shape.getEndArrowWidth() - state.shape.strokewidth) * state.view.scale;
 						var l = mxUtils.getNumber(state.style, mxConstants.STYLE_ENDSIZE, mxConstants.ARROW_SIZE / 5) * 3 * state.view.scale;
-						
+
 						return new mxPoint(p0.x + nx * (l + state.shape.strokewidth * state.view.scale) - ny * w / 2,
 							p0.y + ny * (l + state.shape.strokewidth * state.view.scale) + nx * w / 2);
-					}, function(dist, nx, ny, p0, p1, pt, me)
-					{
+					}, function (dist, nx, ny, p0, p1, pt, me) {
 						var w = Math.sqrt(mxUtils.ptSegDistSq(p0.x, p0.y, p1.x, p1.y, pt.x, pt.y));
 						var l = mxUtils.ptLineDist(p0.x, p0.y, p0.x + ny, p0.y - nx, pt.x, pt.y);
-						
+
 						state.style[mxConstants.STYLE_ENDSIZE] = Math.round((l - state.shape.strokewidth) * 100 / 3) / 100 / state.view.scale;
 						state.style['endWidth'] = Math.max(0, Math.round(w * 2) - state.shape.getEdgeWidth()) / state.view.scale;
-						
+
 						// Applies to opposite side
-						if (mxEvent.isControlDown(me.getEvent()))
-						{
+						if (mxEvent.isControlDown(me.getEvent())) {
 							state.style[mxConstants.STYLE_STARTSIZE] = state.style[mxConstants.STYLE_ENDSIZE];
 							state.style['startWidth'] = state.style['endWidth'];
 						}
-					
+
 						// Snaps to start geometry
-						if (!mxEvent.isAltDown(me.getEvent()))
-						{
-							if (Math.abs(parseFloat(state.style[mxConstants.STYLE_ENDSIZE]) - parseFloat(state.style[mxConstants.STYLE_STARTSIZE])) < tol / 6)
-							{
+						if (!mxEvent.isAltDown(me.getEvent())) {
+							if (Math.abs(parseFloat(state.style[mxConstants.STYLE_ENDSIZE]) - parseFloat(state.style[mxConstants.STYLE_STARTSIZE])) < tol / 6) {
 								state.style[mxConstants.STYLE_ENDSIZE] = state.style[mxConstants.STYLE_STARTSIZE];
 							}
-							
-							if (Math.abs(parseFloat(state.style['endWidth']) - parseFloat(state.style['startWidth'])) < tol)
-							{
+
+							if (Math.abs(parseFloat(state.style['endWidth']) - parseFloat(state.style['startWidth'])) < tol) {
 								state.style['endWidth'] = state.style['startWidth'];
 							}
 						}
 					}));
 				}
-				
+
 				return handles;
 			},
-			'swimlane': function(state)
-			{
-				var handles = [createHandle(state, [mxConstants.STYLE_STARTSIZE], function(bounds)
-				{
+			'swimlane': function (state) {
+				var handles = [createHandle(state, [mxConstants.STYLE_STARTSIZE], function (bounds) {
 					var size = parseFloat(mxUtils.getValue(state.style, mxConstants.STYLE_STARTSIZE, mxConstants.DEFAULT_STARTSIZE));
-					
-					if (mxUtils.getValue(state.style, mxConstants.STYLE_HORIZONTAL, 1) == 1)
-					{
+
+					if (mxUtils.getValue(state.style, mxConstants.STYLE_HORIZONTAL, 1) == 1) {
 						return new mxPoint(bounds.getCenterX(), bounds.y + Math.max(0, Math.min(bounds.height, size)));
 					}
-					else
-					{
+					else {
 						return new mxPoint(bounds.x + Math.max(0, Math.min(bounds.width, size)), bounds.getCenterY());
 					}
-				}, function(bounds, pt)
-				{	
+				}, function (bounds, pt) {
 					state.style[mxConstants.STYLE_STARTSIZE] =
 						(mxUtils.getValue(this.state.style, mxConstants.STYLE_HORIZONTAL, 1) == 1) ?
 							Math.round(Math.max(0, Math.min(bounds.height, pt.y - bounds.y))) :
 							Math.round(Math.max(0, Math.min(bounds.width, pt.x - bounds.x)));
 				})];
-				
-				if (mxUtils.getValue(state.style, mxConstants.STYLE_ROUNDED))
-				{
+
+				if (mxUtils.getValue(state.style, mxConstants.STYLE_ROUNDED)) {
 					var size = parseFloat(mxUtils.getValue(state.style, mxConstants.STYLE_STARTSIZE, mxConstants.DEFAULT_STARTSIZE));
 					handles.push(createArcHandle(state, size / 2));
 				}
-				
+
 				return handles;
 			},
 			'label': createArcHandleFunction(),
@@ -2677,228 +2353,180 @@
 			'rectangle': createArcHandleFunction(),
 			'triangle': createArcHandleFunction(),
 			'rhombus': createArcHandleFunction(),
-			'umlLifeline': function(state)
-			{
-				return [createHandle(state, ['size'], function(bounds)
-				{
+			'umlLifeline': function (state) {
+				return [createHandle(state, ['size'], function (bounds) {
 					var size = Math.max(0, Math.min(bounds.height, parseFloat(mxUtils.getValue(this.state.style, 'size', UmlLifeline.prototype.size))));
-					
+
 					return new mxPoint(bounds.getCenterX(), bounds.y + size);
-				}, function(bounds, pt)
-				{	
+				}, function (bounds, pt) {
 					this.state.style['size'] = Math.round(Math.max(0, Math.min(bounds.height, pt.y - bounds.y)));
 				}, false)];
 			},
-			'umlFrame': function(state)
-			{
-				var handles = [createHandle(state, ['width', 'height'], function(bounds)
-				{
+			'umlFrame': function (state) {
+				var handles = [createHandle(state, ['width', 'height'], function (bounds) {
 					var w0 = Math.max(UmlFrame.prototype.corner, Math.min(bounds.width, mxUtils.getValue(this.state.style, 'width', UmlFrame.prototype.width)));
 					var h0 = Math.max(UmlFrame.prototype.corner * 1.5, Math.min(bounds.height, mxUtils.getValue(this.state.style, 'height', UmlFrame.prototype.height)));
 
 					return new mxPoint(bounds.x + w0, bounds.y + h0);
-				}, function(bounds, pt)
-				{
+				}, function (bounds, pt) {
 					this.state.style['width'] = Math.round(Math.max(UmlFrame.prototype.corner, Math.min(bounds.width, pt.x - bounds.x)));
 					this.state.style['height'] = Math.round(Math.max(UmlFrame.prototype.corner * 1.5, Math.min(bounds.height, pt.y - bounds.y)));
 				}, false)];
-				
-				if (mxUtils.getValue(state.style, mxConstants.STYLE_ROUNDED, false))
-				{
+
+				if (mxUtils.getValue(state.style, mxConstants.STYLE_ROUNDED, false)) {
 					handles.push(createArcHandle(state));
 				}
-				
+
 				return handles;
 			},
-			'process': function(state)
-			{
-				var handles = [createHandle(state, ['size'], function(bounds)
-				{
+			'process': function (state) {
+				var handles = [createHandle(state, ['size'], function (bounds) {
 					var size = Math.max(0, Math.min(0.5, parseFloat(mxUtils.getValue(this.state.style, 'size', ProcessShape.prototype.size))));
 
 					return new mxPoint(bounds.x + bounds.width * size, bounds.y + bounds.height / 4);
-				}, function(bounds, pt)
-				{
+				}, function (bounds, pt) {
 					this.state.style['size'] = Math.max(0, Math.min(0.5, (pt.x - bounds.x) / bounds.width));
 				})];
-				
-				if (mxUtils.getValue(state.style, mxConstants.STYLE_ROUNDED, false))
-				{
+
+				if (mxUtils.getValue(state.style, mxConstants.STYLE_ROUNDED, false)) {
 					handles.push(createArcHandle(state));
 				}
-				
+
 				return handles;
 			},
-			'cross': function(state)
-			{
-				return [createHandle(state, ['size'], function(bounds)
-				{
+			'cross': function (state) {
+				return [createHandle(state, ['size'], function (bounds) {
 					var m = Math.min(bounds.width, bounds.height);
 					var size = Math.max(0, Math.min(1, mxUtils.getValue(this.state.style, 'size', CrossShape.prototype.size))) * m / 2;
 
 					return new mxPoint(bounds.getCenterX() - size, bounds.getCenterY() - size);
-				}, function(bounds, pt)
-				{
+				}, function (bounds, pt) {
 					var m = Math.min(bounds.width, bounds.height);
 					this.state.style['size'] = Math.max(0, Math.min(1, Math.min((Math.max(0, bounds.getCenterY() - pt.y) / m) * 2,
-							(Math.max(0, bounds.getCenterX() - pt.x) / m) * 2)));
+						(Math.max(0, bounds.getCenterX() - pt.x) / m) * 2)));
 				})];
 			},
-			'note': function(state)
-			{
-				return [createHandle(state, ['size'], function(bounds)
-				{
+			'note': function (state) {
+				return [createHandle(state, ['size'], function (bounds) {
 					var size = Math.max(0, Math.min(bounds.width, Math.min(bounds.height, parseFloat(
 						mxUtils.getValue(this.state.style, 'size', NoteShape.prototype.size)))));
-					
+
 					return new mxPoint(bounds.x + bounds.width - size, bounds.y + size);
-				}, function(bounds, pt)
-				{
+				}, function (bounds, pt) {
 					this.state.style['size'] = Math.round(Math.max(0, Math.min(Math.min(bounds.width, bounds.x + bounds.width - pt.x),
-							Math.min(bounds.height, pt.y - bounds.y))));
+						Math.min(bounds.height, pt.y - bounds.y))));
 				})];
 			},
-			'manualInput': function(state)
-			{
-				var handles = [createHandle(state, ['size'], function(bounds)
-				{
+			'manualInput': function (state) {
+				var handles = [createHandle(state, ['size'], function (bounds) {
 					var size = Math.max(0, Math.min(bounds.height, mxUtils.getValue(this.state.style, 'size', ManualInputShape.prototype.size)));
-					
+
 					return new mxPoint(bounds.x + bounds.width / 4, bounds.y + size * 3 / 4);
-				}, function(bounds, pt)
-				{
+				}, function (bounds, pt) {
 					this.state.style['size'] = Math.round(Math.max(0, Math.min(bounds.height, (pt.y - bounds.y) * 4 / 3)));
 				})];
-				
-				if (mxUtils.getValue(state.style, mxConstants.STYLE_ROUNDED, false))
-				{
+
+				if (mxUtils.getValue(state.style, mxConstants.STYLE_ROUNDED, false)) {
 					handles.push(createArcHandle(state));
 				}
-				
+
 				return handles;
 			},
-			'dataStorage': function(state)
-			{
-				return [createHandle(state, ['size'], function(bounds)
-				{
+			'dataStorage': function (state) {
+				return [createHandle(state, ['size'], function (bounds) {
 					var size = Math.max(0, Math.min(1, parseFloat(mxUtils.getValue(this.state.style, 'size', DataStorageShape.prototype.size))));
 
 					return new mxPoint(bounds.x + (1 - size) * bounds.width, bounds.getCenterY());
-				}, function(bounds, pt)
-				{
+				}, function (bounds, pt) {
 					this.state.style['size'] = Math.max(0, Math.min(1, (bounds.x + bounds.width - pt.x) / bounds.width));
 				})];
 			},
-			'internalStorage': function(state)
-			{
-				var handles = [createHandle(state, ['dx', 'dy'], function(bounds)
-				{
+			'internalStorage': function (state) {
+				var handles = [createHandle(state, ['dx', 'dy'], function (bounds) {
 					var dx = Math.max(0, Math.min(bounds.width, mxUtils.getValue(this.state.style, 'dx', InternalStorageShape.prototype.dx)));
 					var dy = Math.max(0, Math.min(bounds.height, mxUtils.getValue(this.state.style, 'dy', InternalStorageShape.prototype.dy)));
 
 					return new mxPoint(bounds.x + dx, bounds.y + dy);
-				}, function(bounds, pt)
-				{
+				}, function (bounds, pt) {
 					this.state.style['dx'] = Math.round(Math.max(0, Math.min(bounds.width, pt.x - bounds.x)));
 					this.state.style['dy'] = Math.round(Math.max(0, Math.min(bounds.height, pt.y - bounds.y)));
 				})];
-				
-				if (mxUtils.getValue(state.style, mxConstants.STYLE_ROUNDED, false))
-				{
+
+				if (mxUtils.getValue(state.style, mxConstants.STYLE_ROUNDED, false)) {
 					handles.push(createArcHandle(state));
 				}
-				
+
 				return handles;
 			},
-			'corner': function(state)
-			{
-				return [createHandle(state, ['dx', 'dy'], function(bounds)
-				{
+			'corner': function (state) {
+				return [createHandle(state, ['dx', 'dy'], function (bounds) {
 					var dx = Math.max(0, Math.min(bounds.width, mxUtils.getValue(this.state.style, 'dx', CornerShape.prototype.dx)));
 					var dy = Math.max(0, Math.min(bounds.height, mxUtils.getValue(this.state.style, 'dy', CornerShape.prototype.dy)));
 
 					return new mxPoint(bounds.x + dx, bounds.y + dy);
-				}, function(bounds, pt)
-				{
+				}, function (bounds, pt) {
 					this.state.style['dx'] = Math.round(Math.max(0, Math.min(bounds.width, pt.x - bounds.x)));
 					this.state.style['dy'] = Math.round(Math.max(0, Math.min(bounds.height, pt.y - bounds.y)));
 				})];
 			},
-			'tee': function(state)
-			{
-				return [createHandle(state, ['dx', 'dy'], function(bounds)
-				{
+			'tee': function (state) {
+				return [createHandle(state, ['dx', 'dy'], function (bounds) {
 					var dx = Math.max(0, Math.min(bounds.width, mxUtils.getValue(this.state.style, 'dx', TeeShape.prototype.dx)));
 					var dy = Math.max(0, Math.min(bounds.height, mxUtils.getValue(this.state.style, 'dy', TeeShape.prototype.dy)));
 
 					return new mxPoint(bounds.x + (bounds.width + dx) / 2, bounds.y + dy);
-				}, function(bounds, pt)
-				{
+				}, function (bounds, pt) {
 					this.state.style['dx'] = Math.round(Math.max(0, Math.min(bounds.width / 2, (pt.x - bounds.x - bounds.width / 2)) * 2));
 					this.state.style['dy'] = Math.round(Math.max(0, Math.min(bounds.height, pt.y - bounds.y)));
 				})];
 			},
 			'singleArrow': createArrowHandleFunction(1),
-			'doubleArrow': createArrowHandleFunction(0.5),			
-			'folder': function(state)
-			{
-				return [createHandle(state, ['tabWidth', 'tabHeight'], function(bounds)
-				{
+			'doubleArrow': createArrowHandleFunction(0.5),
+			'folder': function (state) {
+				return [createHandle(state, ['tabWidth', 'tabHeight'], function (bounds) {
 					var tw = Math.max(0, Math.min(bounds.width, mxUtils.getValue(this.state.style, 'tabWidth', FolderShape.prototype.tabWidth)));
 					var th = Math.max(0, Math.min(bounds.height, mxUtils.getValue(this.state.style, 'tabHeight', FolderShape.prototype.tabHeight)));
-					
-					if (mxUtils.getValue(this.state.style, 'tabPosition', FolderShape.prototype.tabPosition) == mxConstants.ALIGN_RIGHT)
-					{
+
+					if (mxUtils.getValue(this.state.style, 'tabPosition', FolderShape.prototype.tabPosition) == mxConstants.ALIGN_RIGHT) {
 						tw = bounds.width - tw;
 					}
-					
+
 					return new mxPoint(bounds.x + tw, bounds.y + th);
-				}, function(bounds, pt)
-				{
+				}, function (bounds, pt) {
 					var tw = Math.max(0, Math.min(bounds.width, pt.x - bounds.x));
-					
-					if (mxUtils.getValue(this.state.style, 'tabPosition', FolderShape.prototype.tabPosition) == mxConstants.ALIGN_RIGHT)
-					{
+
+					if (mxUtils.getValue(this.state.style, 'tabPosition', FolderShape.prototype.tabPosition) == mxConstants.ALIGN_RIGHT) {
 						tw = bounds.width - tw;
 					}
-					
+
 					this.state.style['tabWidth'] = Math.round(tw);
 					this.state.style['tabHeight'] = Math.round(Math.max(0, Math.min(bounds.height, pt.y - bounds.y)));
 				})];
 			},
-			'document': function(state)
-			{
-				return [createHandle(state, ['size'], function(bounds)
-				{
+			'document': function (state) {
+				return [createHandle(state, ['size'], function (bounds) {
 					var size = Math.max(0, Math.min(1, parseFloat(mxUtils.getValue(this.state.style, 'size', DocumentShape.prototype.size))));
 
 					return new mxPoint(bounds.x + 3 * bounds.width / 4, bounds.y + (1 - size) * bounds.height);
-				}, function(bounds, pt)
-				{
+				}, function (bounds, pt) {
 					this.state.style['size'] = Math.max(0, Math.min(1, (bounds.y + bounds.height - pt.y) / bounds.height));
 				})];
 			},
-			'tape': function(state)
-			{
-				return [createHandle(state, ['size'], function(bounds)
-				{
+			'tape': function (state) {
+				return [createHandle(state, ['size'], function (bounds) {
 					var size = Math.max(0, Math.min(1, parseFloat(mxUtils.getValue(this.state.style, 'size', TapeShape.prototype.size))));
 
 					return new mxPoint(bounds.getCenterX(), bounds.y + size * bounds.height / 2);
-				}, function(bounds, pt)
-				{
+				}, function (bounds, pt) {
 					this.state.style['size'] = Math.max(0, Math.min(1, ((pt.y - bounds.y) / bounds.height) * 2));
 				})];
 			},
-			'offPageConnector': function(state)
-			{
-				return [createHandle(state, ['size'], function(bounds)
-				{
+			'offPageConnector': function (state) {
+				return [createHandle(state, ['size'], function (bounds) {
 					var size = Math.max(0, Math.min(1, parseFloat(mxUtils.getValue(this.state.style, 'size', OffPageConnectorShape.prototype.size))));
 
 					return new mxPoint(bounds.getCenterX(), bounds.y + (1 - size) * bounds.height);
-				}, function(bounds, pt)
-				{
+				}, function (bounds, pt) {
 					this.state.style['size'] = Math.max(0, Math.min(1, (bounds.y + bounds.height - pt.y) / bounds.height));
 				})];
 			},
@@ -2912,136 +2540,117 @@
 			'trapezoid': createTrapezoidHandleFunction(0.5),
 			'parallelogram': createTrapezoidHandleFunction(1)
 		};
-		
+
 		// Exposes custom handles
 		Graph.createHandle = createHandle;
 		Graph.handleFactory = handleFactory;
 
-		mxVertexHandler.prototype.createCustomHandles = function()
-		{
+		mxVertexHandler.prototype.createCustomHandles = function () {
 			// Not rotatable means locked
-			if (this.state.view.graph.getSelectionCount() == 1)
-			{
+			if (this.state.view.graph.getSelectionCount() == 1) {
 				if (this.graph.isCellRotatable(this.state.cell))
 				// LATER: Make locked state independent of rotatable flag, fix toggle if default is false
 				//if (this.graph.isCellResizable(this.state.cell) || this.graph.isCellMovable(this.state.cell))
 				{
 					var fn = handleFactory[this.state.style['shape']];
-				
-					if (fn != null)
-					{
+
+					if (fn != null) {
 						return fn(this.state);
 					}
 				}
 			}
-			
+
 			return null;
 		};
-		
-		mxEdgeHandler.prototype.createCustomHandles = function()
-		{
-			if (this.state.view.graph.getSelectionCount() == 1)
-			{
+
+		mxEdgeHandler.prototype.createCustomHandles = function () {
+			if (this.state.view.graph.getSelectionCount() == 1) {
 				var fn = handleFactory[this.state.style['shape']];
-				
-				if (fn != null)
-				{
+
+				if (fn != null) {
 					return fn(this.state);
 				}
 			}
-			
+
 			return null;
 		}
 	}
-	else
-	{
+	else {
 		// Dummy entries to avoid NPE in embed mode
-		Graph.createHandle = function() {};
+		Graph.createHandle = function () { };
 		Graph.handleFactory = {};
 	}
-	 
-	 var isoHVector = new mxPoint(1, 0);
-	 var isoVVector = new mxPoint(1, 0);
-		
-	 var alpha1 = mxUtils.toRadians(-30);
-		
-	 var cos1 = Math.cos(alpha1);
-	 var sin1 = Math.sin(alpha1);
 
-	 isoHVector = mxUtils.getRotatedPoint(isoHVector, cos1, sin1);
+	var isoHVector = new mxPoint(1, 0);
+	var isoVVector = new mxPoint(1, 0);
 
-	 var alpha2 = mxUtils.toRadians(-150);
-	 
-	 var cos2 = Math.cos(alpha2);
-	 var sin2 = Math.sin(alpha2);
+	var alpha1 = mxUtils.toRadians(-30);
 
-	 isoVVector = mxUtils.getRotatedPoint(isoVVector, cos2, sin2);
-	
-	 mxEdgeStyle.IsometricConnector = function (state, source, target, points, result)
-	 {
+	var cos1 = Math.cos(alpha1);
+	var sin1 = Math.sin(alpha1);
+
+	isoHVector = mxUtils.getRotatedPoint(isoHVector, cos1, sin1);
+
+	var alpha2 = mxUtils.toRadians(-150);
+
+	var cos2 = Math.cos(alpha2);
+	var sin2 = Math.sin(alpha2);
+
+	isoVVector = mxUtils.getRotatedPoint(isoVVector, cos2, sin2);
+
+	mxEdgeStyle.IsometricConnector = function (state, source, target, points, result) {
 		var view = state.view;
 		var pt = (points != null && points.length > 0) ? points[0] : null;
 		var pts = state.absolutePoints;
 		var p0 = pts[0];
-		var pe = pts[pts.length-1];
-		
-		if (pt != null)
-		{
+		var pe = pts[pts.length - 1];
+
+		if (pt != null) {
 			pt = view.transformControlPoint(state, pt);
 		}
-		
-		if (p0 == null)
-		{
-			if (source != null)
-			{
+
+		if (p0 == null) {
+			if (source != null) {
 				p0 = new mxPoint(source.getCenterX(), source.getCenterY());
 			}
 		}
-		
-		if (pe == null)
-		{
-			if (target != null)
-			{
+
+		if (pe == null) {
+			if (target != null) {
 				pe = new mxPoint(target.getCenterX(), target.getCenterY());
 			}
-		}		
-		
+		}
+
 		var a1 = isoHVector.x;
 		var a2 = isoHVector.y;
-		
+
 		var b1 = isoVVector.x;
 		var b2 = isoVVector.y;
-		
+
 		var elbow = mxUtils.getValue(state.style, 'elbow', 'horizontal') == 'horizontal';
-		
-		if (pe != null && p0 != null)
-		{
+
+		if (pe != null && p0 != null) {
 			var last = p0;
-			
-			function isoLineTo(x, y, ignoreFirst)
-			{
+
+			function isoLineTo(x, y, ignoreFirst) {
 				var c1 = x - last.x;
 				var c2 = y - last.y;
 
 				// Solves for isometric base vectors
 				var h = (b2 * c1 - b1 * c2) / (a1 * b2 - a2 * b1);
 				var v = (a2 * c1 - a1 * c2) / (a2 * b1 - a1 * b2);
-				
-				if (elbow)
-				{
-					if (ignoreFirst)
-					{
+
+				if (elbow) {
+					if (ignoreFirst) {
 						last = new mxPoint(last.x + a1 * h, last.y + a2 * h);
 						result.push(last);
 					}
-	
+
 					last = new mxPoint(last.x + b1 * v, last.y + b2 * v);
 					result.push(last);
 				}
-				else
-				{
-					if (ignoreFirst)
-					{
+				else {
+					if (ignoreFirst) {
 						last = new mxPoint(last.x + b1 * v, last.y + b2 * v);
 						result.push(last);
 					}
@@ -3051,51 +2660,48 @@
 				}
 			};
 
-			if (pt == null)
-			{
+			if (pt == null) {
 				pt = new mxPoint(p0.x + (pe.x - p0.x) / 2, p0.y + (pe.y - p0.y) / 2);
 			}
-			
+
 			isoLineTo(pt.x, pt.y, true);
 			isoLineTo(pe.x, pe.y, false);
 		}
-	 };
+	};
 
-	 mxStyleRegistry.putValue('isometricEdgeStyle', mxEdgeStyle.IsometricConnector);
-	
-	 var graphCreateEdgeHandler = Graph.prototype.createEdgeHandler;
-	 Graph.prototype.createEdgeHandler = function(state, edgeStyle)
-	 {
-	 	if (edgeStyle == mxEdgeStyle.IsometricConnector)
-	 	{
-	 		var handler = new mxElbowEdgeHandler(state);
-	 		handler.snapToTerminals = false;
-	 		
-	 		return handler;
-	 	}
-	 	
-	 	return graphCreateEdgeHandler.apply(this, arguments);
-	 };
+	mxStyleRegistry.putValue('isometricEdgeStyle', mxEdgeStyle.IsometricConnector);
+
+	var graphCreateEdgeHandler = Graph.prototype.createEdgeHandler;
+	Graph.prototype.createEdgeHandler = function (state, edgeStyle) {
+		if (edgeStyle == mxEdgeStyle.IsometricConnector) {
+			var handler = new mxElbowEdgeHandler(state);
+			handler.snapToTerminals = false;
+
+			return handler;
+		}
+
+		return graphCreateEdgeHandler.apply(this, arguments);
+	};
 
 	// Defines connection points for all shapes
 	IsoRectangleShape.prototype.constraints = [];
 	IsoCubeShape.prototype.constraints = [];
 	mxRectangleShape.prototype.constraints = [new mxConnectionConstraint(new mxPoint(0.25, 0), true),
-	                                          new mxConnectionConstraint(new mxPoint(0.5, 0), true),
-	                                          new mxConnectionConstraint(new mxPoint(0.75, 0), true),
-	        	              		 new mxConnectionConstraint(new mxPoint(0, 0.25), true),
-	        	              		 new mxConnectionConstraint(new mxPoint(0, 0.5), true),
-	        	              		 new mxConnectionConstraint(new mxPoint(0, 0.75), true),
-	        	            		 new mxConnectionConstraint(new mxPoint(1, 0.25), true),
-	        	            		 new mxConnectionConstraint(new mxPoint(1, 0.5), true),
-	        	            		 new mxConnectionConstraint(new mxPoint(1, 0.75), true),
-	        	            		 new mxConnectionConstraint(new mxPoint(0.25, 1), true),
-	        	            		 new mxConnectionConstraint(new mxPoint(0.5, 1), true),
-	        	            		 new mxConnectionConstraint(new mxPoint(0.75, 1), true)];
+	new mxConnectionConstraint(new mxPoint(0.5, 0), true),
+	new mxConnectionConstraint(new mxPoint(0.75, 0), true),
+	new mxConnectionConstraint(new mxPoint(0, 0.25), true),
+	new mxConnectionConstraint(new mxPoint(0, 0.5), true),
+	new mxConnectionConstraint(new mxPoint(0, 0.75), true),
+	new mxConnectionConstraint(new mxPoint(1, 0.25), true),
+	new mxConnectionConstraint(new mxPoint(1, 0.5), true),
+	new mxConnectionConstraint(new mxPoint(1, 0.75), true),
+	new mxConnectionConstraint(new mxPoint(0.25, 1), true),
+	new mxConnectionConstraint(new mxPoint(0.5, 1), true),
+	new mxConnectionConstraint(new mxPoint(0.75, 1), true)];
 	mxEllipse.prototype.constraints = [new mxConnectionConstraint(new mxPoint(0, 0), true), new mxConnectionConstraint(new mxPoint(1, 0), true),
-	                                   new mxConnectionConstraint(new mxPoint(0, 1), true), new mxConnectionConstraint(new mxPoint(1, 1), true),
-	                                   new mxConnectionConstraint(new mxPoint(0.5, 0), true), new mxConnectionConstraint(new mxPoint(0.5, 1), true),
-	          	              		   new mxConnectionConstraint(new mxPoint(0, 0.5), true), new mxConnectionConstraint(new mxPoint(1, 0.5))];
+	new mxConnectionConstraint(new mxPoint(0, 1), true), new mxConnectionConstraint(new mxPoint(1, 1), true),
+	new mxConnectionConstraint(new mxPoint(0.5, 0), true), new mxConnectionConstraint(new mxPoint(0.5, 1), true),
+	new mxConnectionConstraint(new mxPoint(0, 0.5), true), new mxConnectionConstraint(new mxPoint(1, 0.5))];
 	mxLabel.prototype.constraints = mxRectangleShape.prototype.constraints;
 	mxImageShape.prototype.constraints = mxRectangleShape.prototype.constraints;
 	mxSwimlane.prototype.constraints = mxRectangleShape.prototype.constraints;
@@ -3116,147 +2722,147 @@
 	LoopLimitShape.prototype.constraints = mxRectangleShape.prototype.constraints;
 	OffPageConnectorShape.prototype.constraints = mxRectangleShape.prototype.constraints;
 	mxCylinder.prototype.constraints = [new mxConnectionConstraint(new mxPoint(0.15, 0.05), false),
-                                        new mxConnectionConstraint(new mxPoint(0.5, 0), true),
-                                        new mxConnectionConstraint(new mxPoint(0.85, 0.05), false),
-      	              		 new mxConnectionConstraint(new mxPoint(0, 0.3), true),
-      	              		 new mxConnectionConstraint(new mxPoint(0, 0.5), true),
-      	              		 new mxConnectionConstraint(new mxPoint(0, 0.7), true),
-      	            		 new mxConnectionConstraint(new mxPoint(1, 0.3), true),
-      	            		 new mxConnectionConstraint(new mxPoint(1, 0.5), true),
-      	            		 new mxConnectionConstraint(new mxPoint(1, 0.7), true),
-      	            		 new mxConnectionConstraint(new mxPoint(0.15, 0.95), false),
-      	            		 new mxConnectionConstraint(new mxPoint(0.5, 1), true),
-      	            		 new mxConnectionConstraint(new mxPoint(0.85, 0.95), false)];
+	new mxConnectionConstraint(new mxPoint(0.5, 0), true),
+	new mxConnectionConstraint(new mxPoint(0.85, 0.05), false),
+	new mxConnectionConstraint(new mxPoint(0, 0.3), true),
+	new mxConnectionConstraint(new mxPoint(0, 0.5), true),
+	new mxConnectionConstraint(new mxPoint(0, 0.7), true),
+	new mxConnectionConstraint(new mxPoint(1, 0.3), true),
+	new mxConnectionConstraint(new mxPoint(1, 0.5), true),
+	new mxConnectionConstraint(new mxPoint(1, 0.7), true),
+	new mxConnectionConstraint(new mxPoint(0.15, 0.95), false),
+	new mxConnectionConstraint(new mxPoint(0.5, 1), true),
+	new mxConnectionConstraint(new mxPoint(0.85, 0.95), false)];
 	UmlActorShape.prototype.constraints = [new mxConnectionConstraint(new mxPoint(0.25, 0.1), false),
-	                                          new mxConnectionConstraint(new mxPoint(0.5, 0), false),
-	                                          new mxConnectionConstraint(new mxPoint(0.75, 0.1), false),
-	        	              		 new mxConnectionConstraint(new mxPoint(0, 1/3), false),
-	        	              		 new mxConnectionConstraint(new mxPoint(0, 1), false),
-	        	            		 new mxConnectionConstraint(new mxPoint(1, 1/3), false),
-	        	            		 new mxConnectionConstraint(new mxPoint(1, 1), false),
-	        	            		 new mxConnectionConstraint(new mxPoint(0.5, 0.5), false)];
+	new mxConnectionConstraint(new mxPoint(0.5, 0), false),
+	new mxConnectionConstraint(new mxPoint(0.75, 0.1), false),
+	new mxConnectionConstraint(new mxPoint(0, 1 / 3), false),
+	new mxConnectionConstraint(new mxPoint(0, 1), false),
+	new mxConnectionConstraint(new mxPoint(1, 1 / 3), false),
+	new mxConnectionConstraint(new mxPoint(1, 1), false),
+	new mxConnectionConstraint(new mxPoint(0.5, 0.5), false)];
 	ComponentShape.prototype.constraints = [new mxConnectionConstraint(new mxPoint(0.25, 0), true),
-	                                          new mxConnectionConstraint(new mxPoint(0.5, 0), true),
-	                                          new mxConnectionConstraint(new mxPoint(0.75, 0), true),
-	        	              		 new mxConnectionConstraint(new mxPoint(0, 0.3), true),
-	        	              		 new mxConnectionConstraint(new mxPoint(0, 0.7), true),
-	        	            		 new mxConnectionConstraint(new mxPoint(1, 0.25), true),
-	        	            		 new mxConnectionConstraint(new mxPoint(1, 0.5), true),
-	        	            		 new mxConnectionConstraint(new mxPoint(1, 0.75), true),
-	        	            		 new mxConnectionConstraint(new mxPoint(0.25, 1), true),
-	        	            		 new mxConnectionConstraint(new mxPoint(0.5, 1), true),
-	        	            		 new mxConnectionConstraint(new mxPoint(0.75, 1), true)];
+	new mxConnectionConstraint(new mxPoint(0.5, 0), true),
+	new mxConnectionConstraint(new mxPoint(0.75, 0), true),
+	new mxConnectionConstraint(new mxPoint(0, 0.3), true),
+	new mxConnectionConstraint(new mxPoint(0, 0.7), true),
+	new mxConnectionConstraint(new mxPoint(1, 0.25), true),
+	new mxConnectionConstraint(new mxPoint(1, 0.5), true),
+	new mxConnectionConstraint(new mxPoint(1, 0.75), true),
+	new mxConnectionConstraint(new mxPoint(0.25, 1), true),
+	new mxConnectionConstraint(new mxPoint(0.5, 1), true),
+	new mxConnectionConstraint(new mxPoint(0.75, 1), true)];
 	mxActor.prototype.constraints = [new mxConnectionConstraint(new mxPoint(0.5, 0), true),
-   	              		 new mxConnectionConstraint(new mxPoint(0.25, 0.2), false),
-   	              		 new mxConnectionConstraint(new mxPoint(0.1, 0.5), false),
-   	              		 new mxConnectionConstraint(new mxPoint(0, 0.75), true),
-   	            		 new mxConnectionConstraint(new mxPoint(0.75, 0.25), false),
-   	            		 new mxConnectionConstraint(new mxPoint(0.9, 0.5), false),
-   	            		 new mxConnectionConstraint(new mxPoint(1, 0.75), true),
-   	            		 new mxConnectionConstraint(new mxPoint(0.25, 1), true),
-   	            		 new mxConnectionConstraint(new mxPoint(0.5, 1), true),
-   	            		 new mxConnectionConstraint(new mxPoint(0.75, 1), true)];
+	new mxConnectionConstraint(new mxPoint(0.25, 0.2), false),
+	new mxConnectionConstraint(new mxPoint(0.1, 0.5), false),
+	new mxConnectionConstraint(new mxPoint(0, 0.75), true),
+	new mxConnectionConstraint(new mxPoint(0.75, 0.25), false),
+	new mxConnectionConstraint(new mxPoint(0.9, 0.5), false),
+	new mxConnectionConstraint(new mxPoint(1, 0.75), true),
+	new mxConnectionConstraint(new mxPoint(0.25, 1), true),
+	new mxConnectionConstraint(new mxPoint(0.5, 1), true),
+	new mxConnectionConstraint(new mxPoint(0.75, 1), true)];
 	SwitchShape.prototype.constraints = [new mxConnectionConstraint(new mxPoint(0, 0), false),
-                                         new mxConnectionConstraint(new mxPoint(0.5, 0.25), false),
-                                         new mxConnectionConstraint(new mxPoint(1, 0), false),
-			       	              		 new mxConnectionConstraint(new mxPoint(0.25, 0.5), false),
-			       	              		 new mxConnectionConstraint(new mxPoint(0.75, 0.5), false),
-			       	              		 new mxConnectionConstraint(new mxPoint(0, 1), false),
-			       	            		 new mxConnectionConstraint(new mxPoint(0.5, 0.75), false),
-			       	            		 new mxConnectionConstraint(new mxPoint(1, 1), false)];
+	new mxConnectionConstraint(new mxPoint(0.5, 0.25), false),
+	new mxConnectionConstraint(new mxPoint(1, 0), false),
+	new mxConnectionConstraint(new mxPoint(0.25, 0.5), false),
+	new mxConnectionConstraint(new mxPoint(0.75, 0.5), false),
+	new mxConnectionConstraint(new mxPoint(0, 1), false),
+	new mxConnectionConstraint(new mxPoint(0.5, 0.75), false),
+	new mxConnectionConstraint(new mxPoint(1, 1), false)];
 	TapeShape.prototype.constraints = [new mxConnectionConstraint(new mxPoint(0, 0.35), false),
-	                                   new mxConnectionConstraint(new mxPoint(0, 0.5), false),
-	                                   new mxConnectionConstraint(new mxPoint(0, 0.65), false),
-	                                   new mxConnectionConstraint(new mxPoint(1, 0.35), false),
-		                                new mxConnectionConstraint(new mxPoint(1, 0.5), false),
-		                                new mxConnectionConstraint(new mxPoint(1, 0.65), false),
-										new mxConnectionConstraint(new mxPoint(0.25, 1), false),
-										new mxConnectionConstraint(new mxPoint(0.75, 0), false)];
+	new mxConnectionConstraint(new mxPoint(0, 0.5), false),
+	new mxConnectionConstraint(new mxPoint(0, 0.65), false),
+	new mxConnectionConstraint(new mxPoint(1, 0.35), false),
+	new mxConnectionConstraint(new mxPoint(1, 0.5), false),
+	new mxConnectionConstraint(new mxPoint(1, 0.65), false),
+	new mxConnectionConstraint(new mxPoint(0.25, 1), false),
+	new mxConnectionConstraint(new mxPoint(0.75, 0), false)];
 	// TODO: Relative ports
 	StepShape.prototype.constraints = [new mxConnectionConstraint(new mxPoint(0.25, 0), true),
-                                       new mxConnectionConstraint(new mxPoint(0.5, 0), true),
-                                       new mxConnectionConstraint(new mxPoint(0.75, 0), true),
-                                       new mxConnectionConstraint(new mxPoint(0.25, 1), true),
-  	        	            		 	new mxConnectionConstraint(new mxPoint(0.5, 1), true),
-  	        	            		 	new mxConnectionConstraint(new mxPoint(0.75, 1), true),
-	                                   new mxConnectionConstraint(new mxPoint(0.1, 0.25), false),
-	                                   new mxConnectionConstraint(new mxPoint(0.2, 0.5), false),
-	                                   new mxConnectionConstraint(new mxPoint(0.1, 0.75), false),
-	                                   new mxConnectionConstraint(new mxPoint(0.9, 0.25), false),
-		                                new mxConnectionConstraint(new mxPoint(1, 0.5), false),
-		                                new mxConnectionConstraint(new mxPoint(0.9, 0.75), false)];
+	new mxConnectionConstraint(new mxPoint(0.5, 0), true),
+	new mxConnectionConstraint(new mxPoint(0.75, 0), true),
+	new mxConnectionConstraint(new mxPoint(0.25, 1), true),
+	new mxConnectionConstraint(new mxPoint(0.5, 1), true),
+	new mxConnectionConstraint(new mxPoint(0.75, 1), true),
+	new mxConnectionConstraint(new mxPoint(0.1, 0.25), false),
+	new mxConnectionConstraint(new mxPoint(0.2, 0.5), false),
+	new mxConnectionConstraint(new mxPoint(0.1, 0.75), false),
+	new mxConnectionConstraint(new mxPoint(0.9, 0.25), false),
+	new mxConnectionConstraint(new mxPoint(1, 0.5), false),
+	new mxConnectionConstraint(new mxPoint(0.9, 0.75), false)];
 	mxLine.prototype.constraints = [new mxConnectionConstraint(new mxPoint(0, 0.5), false),
-	                                new mxConnectionConstraint(new mxPoint(0.25, 0.5), false),
-	                                new mxConnectionConstraint(new mxPoint(0.75, 0.5), false),
-									new mxConnectionConstraint(new mxPoint(1, 0.5), false)];
+	new mxConnectionConstraint(new mxPoint(0.25, 0.5), false),
+	new mxConnectionConstraint(new mxPoint(0.75, 0.5), false),
+	new mxConnectionConstraint(new mxPoint(1, 0.5), false)];
 	LollipopShape.prototype.constraints = [new mxConnectionConstraint(new mxPoint(0.5, 0), false),
-										new mxConnectionConstraint(new mxPoint(0.5, 1), false)];
+	new mxConnectionConstraint(new mxPoint(0.5, 1), false)];
 	mxDoubleEllipse.prototype.constraints = mxEllipse.prototype.constraints;
 	mxRhombus.prototype.constraints = mxEllipse.prototype.constraints;
 	mxTriangle.prototype.constraints = [new mxConnectionConstraint(new mxPoint(0, 0.25), true),
-	                                    new mxConnectionConstraint(new mxPoint(0, 0.5), true),
-	                                   new mxConnectionConstraint(new mxPoint(0, 0.75), true),
-	                                   new mxConnectionConstraint(new mxPoint(0.5, 0), true),
-	                                   new mxConnectionConstraint(new mxPoint(0.5, 1), true),
-	                                   new mxConnectionConstraint(new mxPoint(1, 0.5), true)];
+	new mxConnectionConstraint(new mxPoint(0, 0.5), true),
+	new mxConnectionConstraint(new mxPoint(0, 0.75), true),
+	new mxConnectionConstraint(new mxPoint(0.5, 0), true),
+	new mxConnectionConstraint(new mxPoint(0.5, 1), true),
+	new mxConnectionConstraint(new mxPoint(1, 0.5), true)];
 	mxHexagon.prototype.constraints = [new mxConnectionConstraint(new mxPoint(0.375, 0), true),
-	                                    new mxConnectionConstraint(new mxPoint(0.5, 0), true),
-	                                   new mxConnectionConstraint(new mxPoint(0.625, 0), true),
-	                                   new mxConnectionConstraint(new mxPoint(0.125, 0.25), false),
-	                                   new mxConnectionConstraint(new mxPoint(0, 0.5), true),
-	                                   new mxConnectionConstraint(new mxPoint(0.125, 0.75), false),
-	                                   new mxConnectionConstraint(new mxPoint(0.875, 0.25), false),
-	                                   new mxConnectionConstraint(new mxPoint(0, 0.5), true),
-	                                   new mxConnectionConstraint(new mxPoint(1, 0.5), true),
-	                                   new mxConnectionConstraint(new mxPoint(0.875, 0.75), false),
-	                                   new mxConnectionConstraint(new mxPoint(0.375, 1), true),
-	                                    new mxConnectionConstraint(new mxPoint(0.5, 1), true),
-	                                   new mxConnectionConstraint(new mxPoint(0.625, 1), true)];
+	new mxConnectionConstraint(new mxPoint(0.5, 0), true),
+	new mxConnectionConstraint(new mxPoint(0.625, 0), true),
+	new mxConnectionConstraint(new mxPoint(0.125, 0.25), false),
+	new mxConnectionConstraint(new mxPoint(0, 0.5), true),
+	new mxConnectionConstraint(new mxPoint(0.125, 0.75), false),
+	new mxConnectionConstraint(new mxPoint(0.875, 0.25), false),
+	new mxConnectionConstraint(new mxPoint(0, 0.5), true),
+	new mxConnectionConstraint(new mxPoint(1, 0.5), true),
+	new mxConnectionConstraint(new mxPoint(0.875, 0.75), false),
+	new mxConnectionConstraint(new mxPoint(0.375, 1), true),
+	new mxConnectionConstraint(new mxPoint(0.5, 1), true),
+	new mxConnectionConstraint(new mxPoint(0.625, 1), true)];
 	mxCloud.prototype.constraints = [new mxConnectionConstraint(new mxPoint(0.25, 0.25), false),
-	                                 new mxConnectionConstraint(new mxPoint(0.4, 0.1), false),
-	                                 new mxConnectionConstraint(new mxPoint(0.16, 0.55), false),
-	                                 new mxConnectionConstraint(new mxPoint(0.07, 0.4), false),
-	                                 new mxConnectionConstraint(new mxPoint(0.31, 0.8), false),
-	                                 new mxConnectionConstraint(new mxPoint(0.13, 0.77), false),
-	                                 new mxConnectionConstraint(new mxPoint(0.8, 0.8), false),
-	                                 new mxConnectionConstraint(new mxPoint(0.55, 0.95), false),
-	                                 new mxConnectionConstraint(new mxPoint(0.875, 0.5), false),
-	                                 new mxConnectionConstraint(new mxPoint(0.96, 0.7), false),
-	                                 new mxConnectionConstraint(new mxPoint(0.625, 0.2), false),
-	                                 new mxConnectionConstraint(new mxPoint(0.88, 0.25), false)];
+	new mxConnectionConstraint(new mxPoint(0.4, 0.1), false),
+	new mxConnectionConstraint(new mxPoint(0.16, 0.55), false),
+	new mxConnectionConstraint(new mxPoint(0.07, 0.4), false),
+	new mxConnectionConstraint(new mxPoint(0.31, 0.8), false),
+	new mxConnectionConstraint(new mxPoint(0.13, 0.77), false),
+	new mxConnectionConstraint(new mxPoint(0.8, 0.8), false),
+	new mxConnectionConstraint(new mxPoint(0.55, 0.95), false),
+	new mxConnectionConstraint(new mxPoint(0.875, 0.5), false),
+	new mxConnectionConstraint(new mxPoint(0.96, 0.7), false),
+	new mxConnectionConstraint(new mxPoint(0.625, 0.2), false),
+	new mxConnectionConstraint(new mxPoint(0.88, 0.25), false)];
 	ParallelogramShape.prototype.constraints = mxRectangleShape.prototype.constraints;
 	TrapezoidShape.prototype.constraints = mxRectangleShape.prototype.constraints;
 	DocumentShape.prototype.constraints = [new mxConnectionConstraint(new mxPoint(0.25, 0), true),
-	                                          new mxConnectionConstraint(new mxPoint(0.5, 0), true),
-	                                          new mxConnectionConstraint(new mxPoint(0.75, 0), true),
-	        	              		 new mxConnectionConstraint(new mxPoint(0, 0.25), true),
-	        	              		 new mxConnectionConstraint(new mxPoint(0, 0.5), true),
-	        	              		 new mxConnectionConstraint(new mxPoint(0, 0.75), true),
-	        	            		 new mxConnectionConstraint(new mxPoint(1, 0.25), true),
-	        	            		 new mxConnectionConstraint(new mxPoint(1, 0.5), true),
-	        	            		 new mxConnectionConstraint(new mxPoint(1, 0.75), true)];
+	new mxConnectionConstraint(new mxPoint(0.5, 0), true),
+	new mxConnectionConstraint(new mxPoint(0.75, 0), true),
+	new mxConnectionConstraint(new mxPoint(0, 0.25), true),
+	new mxConnectionConstraint(new mxPoint(0, 0.5), true),
+	new mxConnectionConstraint(new mxPoint(0, 0.75), true),
+	new mxConnectionConstraint(new mxPoint(1, 0.25), true),
+	new mxConnectionConstraint(new mxPoint(1, 0.5), true),
+	new mxConnectionConstraint(new mxPoint(1, 0.75), true)];
 	mxArrow.prototype.constraints = null;
 	TeeShape.prototype.constraints = null;
 	CornerShape.prototype.constraints = null;
 	SingleArrowShape.prototype.constraints = [new mxConnectionConstraint(new mxPoint(0, 0.5), false),
-	                                    new mxConnectionConstraint(new mxPoint(1, 0.5), false)];
+	new mxConnectionConstraint(new mxPoint(1, 0.5), false)];
 	DoubleArrowShape.prototype.constraints = [new mxConnectionConstraint(new mxPoint(0, 0.5), false),
-	  	                                    new mxConnectionConstraint(new mxPoint(1, 0.5), false)];
+	new mxConnectionConstraint(new mxPoint(1, 0.5), false)];
 	CrossShape.prototype.constraints = [new mxConnectionConstraint(new mxPoint(0, 0.5), false),
-	                                    new mxConnectionConstraint(new mxPoint(1, 0.5), false),
-	                                    new mxConnectionConstraint(new mxPoint(0.5, 0), false),
-	                                    new mxConnectionConstraint(new mxPoint(0.5, 1), false)];
+	new mxConnectionConstraint(new mxPoint(1, 0.5), false),
+	new mxConnectionConstraint(new mxPoint(0.5, 0), false),
+	new mxConnectionConstraint(new mxPoint(0.5, 1), false)];
 	UmlLifeline.prototype.constraints = null;
 	OrShape.prototype.constraints = [new mxConnectionConstraint(new mxPoint(0, 0.25), false),
-	  	                             new mxConnectionConstraint(new mxPoint(0, 0.5), false),
-	  	                             new mxConnectionConstraint(new mxPoint(0, 0.75), false),
-	  	                             new mxConnectionConstraint(new mxPoint(1, 0.5), false),
-	  	                             new mxConnectionConstraint(new mxPoint(0.7, 0.1), false),
-	  	                             new mxConnectionConstraint(new mxPoint(0.7, 0.9), false)];
+	new mxConnectionConstraint(new mxPoint(0, 0.5), false),
+	new mxConnectionConstraint(new mxPoint(0, 0.75), false),
+	new mxConnectionConstraint(new mxPoint(1, 0.5), false),
+	new mxConnectionConstraint(new mxPoint(0.7, 0.1), false),
+	new mxConnectionConstraint(new mxPoint(0.7, 0.9), false)];
 	XorShape.prototype.constraints = [new mxConnectionConstraint(new mxPoint(0.175, 0.25), false),
-	  	                             new mxConnectionConstraint(new mxPoint(0.25, 0.5), false),
-	  	                             new mxConnectionConstraint(new mxPoint(0.175, 0.75), false),
-	  	                             new mxConnectionConstraint(new mxPoint(1, 0.5), false),
-	  	                             new mxConnectionConstraint(new mxPoint(0.7, 0.1), false),
-	  	                             new mxConnectionConstraint(new mxPoint(0.7, 0.9), false)];
+	new mxConnectionConstraint(new mxPoint(0.25, 0.5), false),
+	new mxConnectionConstraint(new mxPoint(0.175, 0.75), false),
+	new mxConnectionConstraint(new mxPoint(1, 0.5), false),
+	new mxConnectionConstraint(new mxPoint(0.7, 0.1), false),
+	new mxConnectionConstraint(new mxPoint(0.7, 0.9), false)];
 })();

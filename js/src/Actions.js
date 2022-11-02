@@ -29,14 +29,15 @@ Actions.prototype.init = function () {
   this.addAction('new...', function () {
     window.open(ui.getUrl());
   });
-  // this.addAction('open...', function () {
-  //   window.openNew = true;
-  //   window.openKey = 'open';
+   //this.addAction('open...', function () {
+     //window.openNew = true;
+  
+     //window.openKey = 'open';
 
-  //   window.editorUi = ui;
+     //window.editorUi = ui;
 
-  //   ui.openFile();
-  // });
+     //ui.openFile();
+   //});
   this.addAction('import...', function () {
     window.openNew = false;
     window.openKey = 'import';
@@ -68,9 +69,9 @@ Actions.prototype.init = function () {
   this.addAction('save', function () {
     saveFile(ui, false);
   }, null, null, 'Ctrl+S').isEnabled = isGraphEnabled;
-  // this.addAction('saveAs...', function () {
-  //   saveFile(ui, true);
-  // }, null, null, 'Ctrl+Shift+S').isEnabled = isGraphEnabled;
+   this.addAction('saveAs', function () {
+     saveFile(ui, true);
+   }, null, null, 'Ctrl+Shift+S').isEnabled = isGraphEnabled;
   this.addAction('export...', function () {
     ui.showDialog(new ExportDialog(ui).container, 300, 230, true, true);
   });

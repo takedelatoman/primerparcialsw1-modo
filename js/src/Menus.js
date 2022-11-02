@@ -405,7 +405,8 @@ Menus.prototype.init = function () {
 		                         'selectVertices', 'selectEdges', 'selectAll', 'selectNone', '-', 'lockUnlock']);
   })));
   this.put('extras', new Menu(mxUtils.bind(this, function (menu, parent) {
-    this.addMenuItems(menu, ['copyConnect', 'collapseExpand', '-', 'editDiagram']);
+    this.addMenuItems(menu, ['editDiagram','Ver codigo xml']);
+    //this.addMenuItems(menu, ['copyConnect', 'collapseExpand', '-', 'editDiagram']);
   })));
   this.put('help', new Menu(mxUtils.bind(this, function (menu, parent) {
     this.addMenuItems(menu, ['help', '-', 'about']);
