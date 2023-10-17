@@ -4,7 +4,7 @@
 	font-weight: 700;
 	border:none;
 	margin:0px;
-	color: #2f5bb7;
+	color: chocolate;
 	background-color: #843534;
 }
 .geEditor input[type=text]::-ms-clear {
@@ -199,7 +199,7 @@
 	text-decoration:none;
 }
 .geMenubarContainer {
-	background-color:#91cdf8;
+	background-color:#666666;
 	
 }
 .geMenubar {
@@ -343,7 +343,7 @@ div.mxWindow .geButton {
 	padding:6px 0px 6px 14px;
 	margin:0px;
 	cursor:default;
-	background:#91CDF8;
+	background:rgb(191, 156, 156);
 	white-space:nowrap;
 	overflow:hidden;
 	text-overflow:ellipsis;

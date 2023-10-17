@@ -67,12 +67,10 @@ io.on('connection', (socket) => {
 
     // consumir el endpoint para obtener el usuario por su token
     // le paso el token del usuario como parametro
-    // TODO: CAMBIAR A LA URL DE MI API
     const responseUser = await axios.get('http://localhost:5000/apis/user/' + name);
 
     // consumir el endpoint para obtener la el proyecto por su codigo/llave
     // le paso el codigo de la sala
-    // TODO: CAMBIAR A LA URL DE MI API
     const responseProject = await axios.get('http://localhost:5000/apis/cargar-salas/' + room);
 
     if ((responseUser.status === 200 && responseProject.status === 200) && responseUser.data.name && responseProject.data.nombre) {

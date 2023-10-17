@@ -18,7 +18,7 @@ if (!isProd) {
 module.exports = {
   entry: './js/index.js',
   output: {
-    publicPath: '/model-c4',
+    publicPath: '/model-UML',
     filename: '[hash].bundle.js',
   },
   plugins: [

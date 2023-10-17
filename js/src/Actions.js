@@ -29,17 +29,17 @@ Actions.prototype.init = function () {
   this.addAction('new...', function () {
     window.open(ui.getUrl());
   });
-   //this.addAction('open...', function () {
-     //window.openNew = true;
+   this.addAction('open...', function () {
+     window.openNew = true;
   
-     //window.openKey = 'open';
+     window.openKey = 'open';
 
-     //window.editorUi = ui;
+     window.editorUi = ui;
 
-     //ui.openFile();
-   //});
-  this.addAction('import...', function () {
-    window.openNew = false;
+     ui.openFile();
+   });
+  this.addAction('import', function () {
+    window.openNew = true;
     window.openKey = 'import';
 
     // Closes dialog after open
@@ -72,7 +72,7 @@ Actions.prototype.init = function () {
    this.addAction('saveAs', function () {
      saveFile(ui, true);
    }, null, null, 'Ctrl+Shift+S').isEnabled = isGraphEnabled;
-  this.addAction('export...', function () {
+  this.addAction('export', function () {
     ui.showDialog(new ExportDialog(ui).container, 300, 230, true, true);
   });
   this.addAction('editDiagram...', function () {
@@ -82,6 +82,7 @@ Actions.prototype.init = function () {
   });
   this.addAction('generateCode...', function () {
     ui.showDialog(new GenerateCodeDialog(ui).container, 300, 230, true, true);
+    
   });
   this.addAction('pageSetup...', function () {
     ui.showDialog(new PageSetupDialog(ui).container, 320, 220, true, true);
